@@ -20,16 +20,6 @@ function Register() {
   const [dlicense, setdlicense] = useState("");
   const [age, setage] = useState("");
 
-  const commuter = localStorage.getItem('tokencommuter');
-  const driver = localStorage.getItem('tokendriver');
-
-  useEffect(() => {
-    if(commuter != "" || commuter != null){
-        navigate("/home");
-        return;
-    }
-  }, [driver, commuter])
-
   const registersubmit = (acctype) => {
       if(acctype == "Commuter"){
         if(confpass == pass){
