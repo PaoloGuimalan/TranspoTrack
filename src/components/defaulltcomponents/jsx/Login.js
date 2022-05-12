@@ -16,7 +16,7 @@ function Login() {
 
   const loginTrigger = () => {
     // navigate("/home");
-    Axios.post(`http://${URL_TWO}/getLogin`, {
+    Axios.post(`https://${URL_TWO}/getLogin`, {
         email: email,
         password: password,
         accountType: accountType
