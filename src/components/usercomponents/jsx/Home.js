@@ -64,7 +64,19 @@ function Home() {
 
   const navigate = useNavigate();
 
+  const commuter = localStorage.getItem('tokencommuter');
+  const driver = localStorage.getItem('tokendriver');
+
+  useEffect(() => {
+    if(commuter == "" || commuter == null){
+        navigate("/login");
+        return;
+    }
+  }, [driver, commuter])
+
   const logoutfunc = () => {
+    localStorage.removeItem('tokencommuter');
+    localStorage.removeItem('tokendriver');
     navigate("/login");
   }
 

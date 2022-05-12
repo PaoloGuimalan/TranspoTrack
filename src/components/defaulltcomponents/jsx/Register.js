@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import '../css/LoginRegister.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { URL_TWO } from '../../../variables';
 
 function Register() {
+
+  const navigate = useNavigate();
 
   const [regtype, setregtype] = useState("None");
 
@@ -17,6 +19,16 @@ function Register() {
   const [pass, setpass] = useState("");
   const [dlicense, setdlicense] = useState("");
   const [age, setage] = useState("");
+
+  const commuter = localStorage.getItem('tokencommuter');
+  const driver = localStorage.getItem('tokendriver');
+
+  useEffect(() => {
+    if(commuter != "" || commuter != null){
+        navigate("/home");
+        return;
+    }
+  }, [driver, commuter])
 
   const registersubmit = (acctype) => {
       if(acctype == "Commuter"){

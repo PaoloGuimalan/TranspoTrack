@@ -14,12 +14,16 @@ function App() {
   
   const [redirector, setredirector] = useState(false);
 
+  const commuter = localStorage.getItem('tokencommuter');
+  const driver = localStorage.getItem('tokendriver');
+
   useEffect(() => {
     if(location.pathname == "/")
     {
       navigate("/home");
     }
-  }, [])
+  }, [location]);
+
 
   return (
     <div className="App">
