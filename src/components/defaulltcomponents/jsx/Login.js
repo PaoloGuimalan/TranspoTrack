@@ -119,6 +119,7 @@ function Login() {
         </motion.div>
         <motion.nav id='nav_login'>
             <li className='li_login'>
+                <div id='img_carier'></div>
             </li>
             <li className='li_login'>
                 <nav>

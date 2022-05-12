@@ -194,6 +194,7 @@ function Register() {
                     </nav>
             </li>
             <li className='li_register'>
+                <div id='img_carier'></div>
             </li>
         </nav>
     </div>
