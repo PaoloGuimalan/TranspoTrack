@@ -32,6 +32,9 @@ function Login() {
                 setpassword("");
             }
         }
+        else{
+            alert(response.data.message);
+        }
     }).catch((err) => {
         console.log(err);
     })
