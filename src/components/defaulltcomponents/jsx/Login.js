@@ -3,6 +3,7 @@ import '../css/LoginRegister.css';
 import Background from '../imgs/bgtranspo.jpg';
 import { Link, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
+import { URL_ONE, URL_TWO } from '../../../variables';
 
 function Login() {
 
@@ -15,7 +16,7 @@ function Login() {
 
   const loginTrigger = () => {
     // navigate("/home");
-    Axios.post('http://localhost:3001/getLogin', {
+    Axios.post(`http://${URL_TWO}/getLogin`, {
         email: email,
         password: password,
         accountType: accountType

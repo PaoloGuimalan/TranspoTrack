@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import '../css/LoginRegister.css';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
+import { URL_TWO } from '../../../variables';
 
 function Register() {
 
@@ -20,7 +21,7 @@ function Register() {
   const registersubmit = (acctype) => {
       if(acctype == "Commuter"){
         if(confpass == pass){
-            Axios.post('http://localhost:3001/registercommuter', {
+            Axios.post(`http://${URL_TWO}/registercommuter`, {
                 firstName: firstName,
                 middleName: middleName,
                 lastName: lastName,
@@ -48,7 +49,7 @@ function Register() {
       }
       else if(acctype == "Driver"){
         if(confpass == pass){
-            Axios.post('http://localhost:3001/registerdriver', {
+            Axios.post(`http://${URL_TWO}/registerdriver`, {
                 firstName: firstName,
                 middleName: middleName,
                 lastName: lastName,
