@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../css/Home.css';
 import Axios from 'axios';
-import { GoogleMap, withScriptjs, withGoogleMap, Marker } from 'react-google-maps'
+import { GoogleMap, withScriptjs, withGoogleMap, Marker, Circle } from 'react-google-maps'
 import Toggle from '@material-ui/icons/Menu'
 import Minimize from '@material-ui/icons/ArrowLeft'
 import { motion } from 'framer-motion';
@@ -10,33 +10,55 @@ import LogoutToggle from '@material-ui/icons/ExitToApp'
 import AccountToggle from '@material-ui/icons/Person'
 import AvRoutesToggle from '@material-ui/icons/Directions'
 import { Link, useNavigate, Routes, Route } from 'react-router-dom';
+import CommuterIcon from '../imgs/commutericon.png';
 
 function Map(){
 
   const [coords, setcoords] = useState({ lat: "", lng: "" });
   const [initialPosition, setinitialPosition] = useState({ lat: "", lng: "" });
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
-    })
-  }, []);
+  const google = window.google;
 
   useEffect(() => {
-    navigator.geolocation.watchPosition((position) => {
-      // console.log(position.coords.latitude);
-      setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
-    })
-  }, [coords]);
+    setInterval(() => {
+      navigator.geolocation.getCurrentPosition((position) => {
+        setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
+        setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
+        // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
+      })
+    }, 1500);
+  }, []);
+
+  // useEffect(() => {
+  //   navigator.geolocation.watchPosition((position) => {
+  //     // console.log(position.coords.latitude);
+  //     setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
+  //     console.log({ lat: position.coords.latitude, lng: position.coords.longitude })
+  //   })
+  // }, [coords]);
 
   return(
       <>
         {initialPosition.lat != "" && initialPosition.lng != ""? (
           <GoogleMap 
-            defaultZoom={15} 
+            defaultZoom={19} 
             defaultCenter={initialPosition}
           >
-            <Marker position={coords} />
+            <Marker 
+              position={coords} 
+              icon={{
+                url: CommuterIcon,
+                anchor: new google.maps.Point(13, 15),
+                scaledSize: new google.maps.Size(25, 27),
+              }}  
+            />
+            <Circle
+              center={coords} 
+              radius={20}
+              options={{
+                strokeColor: "lime"
+              }}
+            />
           </GoogleMap>
         ) : ""}
       </>
