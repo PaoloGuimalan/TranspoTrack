@@ -74,20 +74,18 @@ function Map(){
   }, [driver, commuter])
 
   useEffect(() => {
-    setInterval(() => {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
-        setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
-        // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
-        socketIdentifier({
-          userID: userDataDetails.userID,
-          userType: userDataDetails.userType,
-          address: "Commonwealth, Quezon City",
-          destination: "Lagro",
-          coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
-        })
+    navigator.geolocation.watchPosition((position) => {
+      setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
+      setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
+      // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
+      socketIdentifier({
+        userID: userDataDetails.userID,
+        userType: userDataDetails.userType,
+        address: "Commonwealth, Quezon City",
+        destination: "Lagro",
+        coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
       })
-    }, 1500);
+    })
   }, [userDataDetails]);
 
   // useEffect(() => {
