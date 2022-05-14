@@ -123,7 +123,8 @@ function Map(){
             />
             {livelist.map((ls) => {
               return(
-                <Marker 
+                userDataDetails.userID != ls.userID? (
+                  <Marker 
                     key={ls.userID}
                     title={ls.userID}
                     position={ls.coordinates} 
@@ -132,7 +133,8 @@ function Map(){
                       anchor: new google.maps.Point(13, 15),
                       scaledSize: ls.userType == "Commuter"? new google.maps.Size(25, 27) : new google.maps.Size(27, 27),
                     }}  
-                />
+                  />
+                ) : ""
               )
             })}
           </GoogleMap>
