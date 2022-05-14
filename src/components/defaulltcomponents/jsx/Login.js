@@ -52,6 +52,7 @@ function Login() {
                 localStorage.setItem("tokendriver", response.data.token);
                 setemail("");
                 setpassword("");
+                navigate("/home");
             }
         }
         else{

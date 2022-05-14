@@ -11,6 +11,9 @@ import AccountToggle from '@material-ui/icons/Person'
 import AvRoutesToggle from '@material-ui/icons/Directions'
 import { Link, useNavigate, Routes, Route } from 'react-router-dom';
 import CommuterIcon from '../imgs/commutericon.png';
+import DriverIcon from '../imgs/drivericon.png';
+import { returnValueArray, socketIdentifier } from '../../../socket/socket';
+import { URL_TWO } from '../../../variables';
 
 function Map(){
 
@@ -19,15 +22,73 @@ function Map(){
 
   const google = window.google;
 
+  //NEED TO BE MOVED TO HOME MAIN COMPONENT AND ACCESS DATA THROUGH REDUX
+  
+  const [userDataDetails, setuserDataDetails] = useState({
+    userID: '',
+    userType: '',
+    firstName: '',
+    middleName: '',
+    lastName: '',
+    mobileNumber: '',
+    email: ''
+  });
+
+  const [livelist, setlivelist] = useState([]);
+
+  const commuter = localStorage.getItem('tokencommuter');
+  const driver = localStorage.getItem('tokendriver');
+
+  useEffect(() => {
+    setInterval(() => {
+      // console.log(returnValueArray());
+      setlivelist(returnValueArray());
+    }, 1000);
+  }, [])
+
+  useEffect(() => {
+    if((commuter != "" || commuter != null) && (driver == "" || driver == null)){
+        Axios.get(`https://${URL_TWO}/userData`, {
+          headers:{
+            "x-access-tokencommuter": localStorage.getItem('tokencommuter')
+          }
+        }).then((response) => {
+          // console.log(response.data);
+          setuserDataDetails(response.data);
+        }).catch((err) => {
+          console.log(err);
+        })
+    }
+    else if((commuter == "" || commuter == null) && (driver != "" || driver != null)){
+      Axios.get(`https://${URL_TWO}/userData`, {
+        headers:{
+          "x-access-tokendriver": localStorage.getItem('tokendriver')
+        }
+      }).then((response) => {
+        // console.log(response.data);
+        setuserDataDetails(response.data);
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
+  }, [driver, commuter])
+
   useEffect(() => {
     setInterval(() => {
       navigator.geolocation.getCurrentPosition((position) => {
         setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
         setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
         // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
+        socketIdentifier({
+          userID: userDataDetails.userID,
+          userType: userDataDetails.userType,
+          address: "Commonwealth, Quezon City",
+          destination: "Lagro",
+          coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
+        })
       })
     }, 1500);
-  }, []);
+  }, [userDataDetails]);
 
   // useEffect(() => {
   //   navigator.geolocation.watchPosition((position) => {
@@ -45,20 +106,35 @@ function Map(){
             defaultCenter={initialPosition}
           >
             <Marker 
+              title='Your Location'
               position={coords} 
               icon={{
-                url: CommuterIcon,
+                url: userDataDetails.userType == "Commuter"? CommuterIcon : DriverIcon,
                 anchor: new google.maps.Point(13, 15),
-                scaledSize: new google.maps.Size(25, 27),
+                scaledSize: userDataDetails.userType == "Commuter"? new google.maps.Size(25, 27) : new google.maps.Size(27, 27),
               }}  
             />
             <Circle
               center={coords} 
               radius={20}
               options={{
-                strokeColor: "lime"
+                strokeColor: userDataDetails.userType == "Commuter"? "lime" : "orange"
               }}
             />
+            {livelist.map((ls) => {
+              return(
+                <Marker 
+                    key={ls.userID}
+                    title={ls.userID}
+                    position={ls.coordinates} 
+                    icon={{
+                      url: ls.userType == "Commuter"? CommuterIcon : DriverIcon,
+                      anchor: new google.maps.Point(13, 15),
+                      scaledSize: ls.userType == "Commuter"? new google.maps.Size(25, 27) : new google.maps.Size(27, 27),
+                    }}  
+                />
+              )
+            })}
           </GoogleMap>
         ) : ""}
       </>
@@ -90,7 +166,7 @@ function Home() {
   const driver = localStorage.getItem('tokendriver');
 
   useEffect(() => {
-    if(commuter == "" || commuter == null){
+    if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
         navigate("/login");
         return;
     }
