@@ -6,7 +6,7 @@ export const socketIdentifier = (userData) => {
 
     const io = require("socket.io-client");
 
-    const socket = io.connect(`https://${URL_TWO}`, {
+    const socket = io.connect(`https://${URL_TWO}/`, {
         withCredentials: true,
         extraHeaders: {
         "my-custom-header": "abcd"
@@ -24,15 +24,17 @@ export const socketIdentifier = (userData) => {
         if(dataReceive.userID != ''){
             if(index === -1){
                 array.push(dataReceive);
+                socket.disconnect();
                 // console.log(dataReceive.userID)
             }
             else if(index >= 0){
                 array[index] = dataReceive;
+                socket.disconnect();
                 // console.log("No")
             }
         }
         // console.log(index);
-        console.log(dataReceive.userID);
+        // console.log(dataReceive.userID);
         // console.log(array);
     })
 }
