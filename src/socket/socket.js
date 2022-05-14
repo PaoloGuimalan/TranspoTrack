@@ -32,7 +32,7 @@ export const socketIdentifier = (userData) => {
             }
         }
         // console.log(index);
-        // console.log(dataReceive.userID);
+        console.log(dataReceive.userID);
         // console.log(array);
     })
 }
