@@ -44,6 +44,20 @@
     margin-bottom: 10px;
 }
 
+.infowindow_user{
+    display: flex;
+    width: 200px;
+    flex-direction: column;
+    list-style-type: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.p_labels{
+    margin: 0;
+}
+
 @media screen and (max-width: 720px) {
     #navigation_home{
         background-color: transparent;

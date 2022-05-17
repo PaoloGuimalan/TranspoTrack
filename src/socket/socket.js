@@ -2,7 +2,7 @@ import { URL_TWO } from "../variables";
 
 var array = [];
 
-export const socketIdentifier = (userData) => {
+export const socketIdentifier = (userData, userType) => {
 
     const io = require("socket.io-client");
 
@@ -22,23 +22,33 @@ export const socketIdentifier = (userData) => {
         var index = array.map(function(e) { return e.userID; }).indexOf(dataReceive.userID);
 
         if(dataReceive.userID != ''){
-            if(index === -1){
-                array.push(dataReceive);
-                socket.disconnect();
-                // console.log(dataReceive.userID)
-            }
-            else if(index >= 0){
-                array[index] = dataReceive;
-                socket.disconnect();
-                // console.log("No")
+            array = [];
+            if(userType != dataReceive.userType){
+                if(index === -1){
+                    array.push(dataReceive);
+                    socket.disconnect();
+                    // console.log(dataReceive.userID)
+                }
+                else if(index >= 0){
+                    array[index] = dataReceive;
+                    socket.disconnect();
+                    // console.log("No")
+                }
             }
         }
         // console.log(index);
         // console.log(dataReceive.userID);
         // console.log(array);
+        // console.log(userData);
     })
 }
 
 export const returnValueArray = () => {
     return array;
+}
+
+export const logoutSocket = (userID) => {
+    // // alert(userID);
+    // var index = array.map(function(e) { return e.userID; }).indexOf(userID);
+    // alert(index);
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../css/Home.css';
 import Axios from 'axios';
-import { GoogleMap, withScriptjs, withGoogleMap, Marker, Circle } from 'react-google-maps'
+import { GoogleMap, withScriptjs, withGoogleMap, Marker, Circle, InfoWindow } from 'react-google-maps'
 import Toggle from '@material-ui/icons/Menu'
 import Minimize from '@material-ui/icons/ArrowLeft'
 import { motion } from 'framer-motion';
@@ -12,8 +12,10 @@ import AvRoutesToggle from '@material-ui/icons/Directions'
 import { Link, useNavigate, Routes, Route } from 'react-router-dom';
 import CommuterIcon from '../imgs/commutericon.png';
 import DriverIcon from '../imgs/drivericon.png';
-import { returnValueArray, socketIdentifier } from '../../../socket/socket';
+import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
+import { useDispatch, useSelector } from 'react-redux';
+import { USER_DETAILS } from '../../../redux/types/types';
 
 function Map(){
 
@@ -33,6 +35,9 @@ function Map(){
     mobileNumber: '',
     email: ''
   });
+
+  const dispatch = useDispatch();
+  // const userDataDetails = useSelector(state => state.userdatadetails);
 
   const [livelist, setlivelist] = useState([]);
 
@@ -55,6 +60,7 @@ function Map(){
         }).then((response) => {
           // console.log(response.data);
           setuserDataDetails(response.data);
+          dispatch({type: USER_DETAILS, userdatadetails: response.data})
         }).catch((err) => {
           console.log(err);
         })
@@ -67,6 +73,7 @@ function Map(){
       }).then((response) => {
         // console.log(response.data);
         setuserDataDetails(response.data);
+        dispatch({type: USER_DETAILS, userdatadetails: response.data})
       }).catch((err) => {
         console.log(err);
       })
@@ -85,7 +92,7 @@ function Map(){
           address: "Commonwealth, Quezon City",
           destination: "Lagro",
           coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
-        })
+        }, userDataDetails.userType)
       })
     }, 1500);
   }, [userDataDetails]);
@@ -124,16 +131,28 @@ function Map(){
             {livelist.map((ls) => {
               return(
                 userDataDetails.userID != ls.userID? (
-                  <Marker 
-                    key={ls.userID}
-                    title={ls.userID}
-                    position={ls.coordinates} 
-                    icon={{
-                      url: ls.userType == "Commuter"? CommuterIcon : DriverIcon,
-                      anchor: new google.maps.Point(13, 15),
-                      scaledSize: ls.userType == "Commuter"? new google.maps.Size(25, 27) : new google.maps.Size(27, 27),
-                    }}  
-                  />
+                  <>
+                    <Marker 
+                      key={ls.userID}
+                      title={ls.userID}
+                      position={ls.coordinates} 
+                      icon={{
+                        url: ls.userType == "Commuter"? CommuterIcon : DriverIcon,
+                        anchor: new google.maps.Point(13, 15),
+                        scaledSize: ls.userType == "Commuter"? new google.maps.Size(25, 27) : new google.maps.Size(27, 27),
+                      }}  
+                    />
+                    <InfoWindow position={ls.coordinates} options={{disableAutoPan: true}}>
+                      <nav className='infowindow_user'>
+                        <li>
+                          <p className='p_labels'><b>{ls.userType == "Commuter"? "Commuter:" : "Driver:"}</b> {ls.userID}</p>
+                        </li>
+                        <li>
+                          <p className='p_labels'><b>Destination: </b> {ls.destination}</p>
+                        </li>
+                      </nav>
+                    </InfoWindow>
+                  </>
                 ) : ""
               )
             })}
@@ -167,6 +186,9 @@ function Home() {
   const commuter = localStorage.getItem('tokencommuter');
   const driver = localStorage.getItem('tokendriver');
 
+  const dispatch = useDispatch();
+  const userDataDetails = useSelector(state => state.userdatadetails);
+
   useEffect(() => {
     if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
         navigate("/login");
@@ -175,6 +197,7 @@ function Home() {
   }, [driver, commuter])
 
   const logoutfunc = () => {
+    logoutSocket(userDataDetails.userID);
     localStorage.removeItem('tokencommuter');
     localStorage.removeItem('tokendriver');
     navigate("/login");
