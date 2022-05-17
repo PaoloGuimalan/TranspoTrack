@@ -22,7 +22,7 @@ export const socketIdentifier = (userData, userType) => {
         var index = array.map(function(e) { return e.userID; }).indexOf(dataReceive.userID);
 
         if(dataReceive.userID != ''){
-            array = [];
+            // array = [];
             if(userType != dataReceive.userType){
                 if(index === -1){
                     array.push(dataReceive);
