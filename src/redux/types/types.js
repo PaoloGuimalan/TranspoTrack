@@ -1,1 +1,4 @@
 export const USER_DETAILS = 'USER_DETAILS';
+
+export const SET_COORDS = 'SET_COORDS';
+export const SET_INTITIAL_POSITION = 'SET_INITIAL_POSITION';

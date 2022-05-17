@@ -15,12 +15,14 @@ import DriverIcon from '../imgs/drivericon.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
 import { useDispatch, useSelector } from 'react-redux';
-import { USER_DETAILS } from '../../../redux/types/types';
+import { SET_COORDS, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
+import RoutesConfig from './RoutesConfig';
+import Account from './Account';
 
 function Map(){
 
-  const [coords, setcoords] = useState({ lat: "", lng: "" });
-  const [initialPosition, setinitialPosition] = useState({ lat: "", lng: "" });
+  // const [coords, setcoords] = useState({ lat: "", lng: "" });
+  // const [initialPosition, setinitialPosition] = useState({ lat: "", lng: "" });
 
   const google = window.google;
 
@@ -37,6 +39,8 @@ function Map(){
   });
 
   const dispatch = useDispatch();
+  const initialPosition = useSelector(state => state.initialposition);
+  const coords = useSelector(state => state.coords);
   // const userDataDetails = useSelector(state => state.userdatadetails);
 
   const [livelist, setlivelist] = useState([]);
@@ -80,22 +84,22 @@ function Map(){
     }
   }, [driver, commuter])
 
-  useEffect(() => {
-    setInterval(() => {
-      navigator.geolocation.getCurrentPosition((position) => {
-        setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
-        setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
-        // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
-        socketIdentifier({
-          userID: userDataDetails.userID,
-          userType: userDataDetails.userType,
-          address: "Commonwealth, Quezon City",
-          destination: "Lagro",
-          coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
-        }, userDataDetails.userType)
-      })
-    }, 1500);
-  }, [userDataDetails]);
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     navigator.geolocation.getCurrentPosition((position) => {
+  //       setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
+  //       setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
+  //       // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
+  //       socketIdentifier({
+  //         userID: userDataDetails.userID,
+  //         userType: userDataDetails.userType,
+  //         address: "Commonwealth, Quezon City",
+  //         destination: "Lagro",
+  //         coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
+  //       }, userDataDetails.userType)
+  //     })
+  //   }, 1500);
+  // }, [userDataDetails]);
 
   // useEffect(() => {
   //   navigator.geolocation.watchPosition((position) => {
@@ -123,7 +127,7 @@ function Map(){
             />
             <Circle
               center={coords} 
-              radius={20}
+              radius={30}
               options={{
                 strokeColor: userDataDetails.userType == "Commuter"? "lime" : "orange"
               }}
@@ -147,6 +151,20 @@ function Map(){
                         <li>
                           <p className='p_labels'><b>{ls.userType == "Commuter"? "Commuter:" : "Driver:"}</b> {ls.userID}</p>
                         </li>
+                        <motion.li
+                        animate={{
+                          display: ls.userType == "Driver"? "block" : "none"
+                        }}
+                        >
+                          <p className='p_labels'><b>Route: </b> {"No Applied"}</p>
+                        </motion.li>
+                        <motion.li
+                        animate={{
+                          display: ls.userType == "Driver"? "block" : "none"
+                        }}
+                        >
+                          <p className='p_labels'><b>Vehicle: </b> {"No Applied"}</p>
+                        </motion.li>
                         <li>
                           <p className='p_labels'><b>Destination: </b> {ls.destination}</p>
                         </li>
@@ -188,6 +206,8 @@ function Home() {
 
   const dispatch = useDispatch();
   const userDataDetails = useSelector(state => state.userdatadetails);
+  const initialPosition = useSelector(state => state.initialposition);
+  const coords = useSelector(state => state.coords);
 
   useEffect(() => {
     if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
@@ -195,6 +215,25 @@ function Home() {
         return;
     }
   }, [driver, commuter])
+
+  useEffect(() => {
+    setInterval(() => {
+      navigator.geolocation.getCurrentPosition((position) => {
+        dispatch({type: SET_INTITIAL_POSITION, initialposition:{ lat: position.coords.latitude, lng: position.coords.longitude } })
+        dispatch({type: SET_COORDS, coords:{ lat: position.coords.latitude, lng: position.coords.longitude }})
+        // setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
+        // setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
+        // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
+        socketIdentifier({
+          userID: userDataDetails.userID,
+          userType: userDataDetails.userType,
+          address: "Commonwealth, Quezon City",
+          destination: "Lagro",
+          coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
+        }, userDataDetails.userType)
+      })
+    }, 1500);
+  }, [userDataDetails]);
 
   const logoutfunc = () => {
     logoutSocket(userDataDetails.userID);
@@ -248,6 +287,8 @@ function Home() {
       </motion.div>
       <Routes>
         <Route path='/' element={<MapRoute />} />
+        <Route path='/avroutes' element={<RoutesConfig />} />
+        <Route path='/account' element={<Account />} />
       </Routes>
     </div>
   )
