@@ -183,8 +183,26 @@ function Map(){
 const WrappedMap = withScriptjs(withGoogleMap(Map));
 
 const MapRoute = () => {
+
+  const userDataDetails = useSelector(state => state.userdatadetails);
+  const coords = useSelector(state => state.coords);
+
   return(
     <div style={{ width: "100%", height: "100vh"}}>
+      <div id='div_user_shortcut_details'>
+        <nav id='nav_user_shortcut_details'>
+          <li>
+            <p className='labeltext_user_shortcut_details'><b>User ID:</b> {userDataDetails.userID}</p>
+          </li>
+          <li>
+            <p className='labeltext_user_shortcut_details'><b>Current Destination:</b> {"Not Applied"}</p>
+          </li>
+          <li>
+            <p className='labeltext_user_shortcut_details last_labeltext'><b>In Map Location</b></p>
+            <p>Lat: {coords.lat}<br />Lng: {coords.lng}</p>
+          </li>
+        </nav>
+      </div>
       <WrappedMap 
         googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyAeogbvkQJHv5Xm0Ph_O_ehNWBxkdr_1CU`}
         loadingElement={<div style={{height: '100%'}} />}
@@ -247,7 +265,8 @@ function Home() {
       <motion.div id='navigation_home'
         animate={{
           maxWidth: togglemenu? "300px" : "60px",
-          backgroundColor: togglemenu? "white" : "transparent"
+          backgroundColor: togglemenu? "white" : "transparent",
+          boxShadow: togglemenu? "0px 0px 3px black" : "none"
         }}
       >
         <button onClick={() => {settogglemenu(!togglemenu)}} id='btn_menu'>{togglemenu? <Minimize /> : <Toggle />}</button>

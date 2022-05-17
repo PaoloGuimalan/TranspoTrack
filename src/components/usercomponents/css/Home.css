@@ -9,8 +9,9 @@
     height: 100vh;
     width: 100%;
     max-width: 60px;
-    z-index: 1;
+    z-index: 2;
     background-color: white;
+    /* box-shadow: 0px 0px 3px black; */
 }
 
 #btn_menu{
@@ -37,6 +38,7 @@
     height: 50px;
     border-radius: 50px;
     cursor: pointer;
+    box-shadow: 0px 0px 3px black;
 }
 
 .li_nav_navigations{
@@ -56,6 +58,37 @@
 
 .p_labels{
     margin: 0;
+}
+
+#div_user_shortcut_details{
+    position: absolute;
+    z-index: 1;
+    background-color: white;
+    width: 250px;
+    bottom: 30px;
+    left: 10px;
+    box-shadow: 0px 0px 3px black;
+    border-radius: 5px;
+    text-align: left;
+}
+
+#nav_user_shortcut_details{
+    list-style-type: none;
+    width: calc(100% - 20px);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+}
+
+.labeltext_user_shortcut_details{
+    margin: 0px;
+    /* font-size: 15px; */
+    font-family: Arial;
+}
+
+.last_labeltext{
+    margin-top: 10px;
 }
 
 @media screen and (max-width: 720px) {
