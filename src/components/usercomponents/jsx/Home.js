@@ -338,7 +338,7 @@ function Home() {
       // console.log(alltraveldata);
     }, 1500);
     // console.log(alltraveldata);
-  }, [userDataDetails]);
+  }, [userDataDetails, alltraveldata]);
 
   const logoutfunc = () => {
     logoutSocket(userDataDetails.userID);
