@@ -293,9 +293,11 @@ function Home() {
       }).then((response) => {
         if(response.data.status){
           dispatch({type: SET_DRIVER_TRAVEL_DATA, drivertraveldata: response.data.result});
+          // console.log(response.data);
         }
       }).catch((err) => {
         //alert error
+        console.log(err);
       })
     }
     else if((commuter == "" || commuter == null) && (driver != "" || driver != null)){
@@ -306,13 +308,15 @@ function Home() {
       }).then((response) => {
         if(response.data.status){
           dispatch({type: SET_DRIVER_TRAVEL_DATA, drivertraveldata: response.data.result});
+          // console.log(response.data);
         }
       }).catch((err) => {
         //alert error
+        console.log(err);
       })
     }
-    // console.log(commutertraveldata, drivertraveldata)
-  }, [driver, commuter])
+    // console.log(alltraveldata)
+  }, [driver, commuter, userDataDetails])
 
   useEffect(() => {
     setInterval(() => {
@@ -331,7 +335,9 @@ function Home() {
           coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
         }, userDataDetails.userType)
       })
+      // console.log(alltraveldata);
     }, 1500);
+    // console.log(alltraveldata);
   }, [userDataDetails]);
 
   const logoutfunc = () => {
