@@ -160,17 +160,17 @@ function Map(){
                           display: ls.userType == "Driver"? "block" : "none"
                         }}
                         >
-                          <p className='p_labels'><b>Route: </b> {ls.route}</p>
+                          <p className='p_labels'><b>Route: </b> {ls.route == " - "? "...loading" : ls.route}</p>
                         </motion.li>
                         <motion.li
                         animate={{
                           display: ls.userType == "Driver"? "block" : "none"
                         }}
                         >
-                          <p className='p_labels'><b>Vehicle: </b> {ls.vehicle}</p>
+                          <p className='p_labels'><b>Vehicle: </b> {ls.vehicle == ""? "...loading" : ls.vehicle}</p>
                         </motion.li>
                         <li>
-                          <p className='p_labels'><b>Destination: </b> {ls.destination}</p>
+                          <p className='p_labels'><b>Destination: </b> {ls.destination == ""? "...loading" : ls.destination}</p>
                         </li>
                       </nav>
                     </InfoWindow>) : ""}
