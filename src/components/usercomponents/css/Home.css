@@ -61,7 +61,7 @@
 }
 
 #div_user_shortcut_details{
-    position: absolute;
+    position: fixed;
     z-index: 1;
     background-color: white;
     width: 250px;
