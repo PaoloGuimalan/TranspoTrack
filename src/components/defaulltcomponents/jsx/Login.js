@@ -37,17 +37,48 @@ function Login() {
   const loginTrigger = () => {
     // navigate("/home");
     setloadingState(true);
-    Axios.post(`https://${URL_TWO}/getLogin`, {
-        email: email,
-        password: password,
-        accountType: accountType
-    }).then((response) => {
-        if(response.data.status){
-            if(accountType == "Commuter"){
+    if(accountType != "none"){
+        Axios.post(`https://${URL_TWO}/getLogin`, {
+            email: email,
+            password: password,
+            accountType: accountType
+        }).then((response) => {
+            if(response.data.status){
+                if(accountType == "Commuter"){
+                    setloadingState(false)
+                    localStorage.setItem("tokencommuter", response.data.token);
+                    setemail("");
+                    setpassword("");
+                    setmessageContent(response.data.message);
+                    setmessageAlert(true);
+                    setTimeout(() => {
+                        setmessageAlert(false);
+                    }, 3000);
+                    setTimeout(() => {
+                        setmessageContent("");
+                        navigate("/home");
+                    }, 3500);
+                    // navigate("/home");
+                }
+                else if(accountType == "Driver"){
+                    setloadingState(false)
+                    localStorage.setItem("tokendriver", response.data.token);
+                    setemail("");
+                    setpassword("");
+                    setmessageContent(response.data.message);
+                    setmessageAlert(true);
+                    setTimeout(() => {
+                        setmessageAlert(false);
+                    }, 3000);
+                    setTimeout(() => {
+                        setmessageContent("");
+                        navigate("/home");
+                    }, 3500);
+                    // navigate("/home");
+                }
+            }
+            else{
                 setloadingState(false)
-                localStorage.setItem("tokencommuter", response.data.token);
-                setemail("");
-                setpassword("");
                 setmessageContent(response.data.message);
                 setmessageAlert(true);
                 setTimeout(() => {
@@ -55,43 +86,25 @@ function Login() {
                 }, 3000);
                 setTimeout(() => {
                     setmessageContent("");
-                    navigate("/home");
                 }, 3500);
-                // navigate("/home");
+                // alert(response.data.message);
             }
-            else if(accountType == "Driver"){
-                setloadingState(false)
-                localStorage.setItem("tokendriver", response.data.token);
-                setemail("");
-                setpassword("");
-                setmessageContent(response.data.message);
-                setmessageAlert(true);
-                setTimeout(() => {
-                    setmessageAlert(false);
-                }, 3000);
-                setTimeout(() => {
-                    setmessageContent("");
-                    navigate("/home");
-                }, 3500);
-                // navigate("/home");
-            }
-        }
-        else{
+        }).catch((err) => {
+            console.log(err);
             setloadingState(false)
-            setmessageContent(response.data.message);
-            setmessageAlert(true);
-            setTimeout(() => {
-                setmessageAlert(false);
-            }, 3000);
-            setTimeout(() => {
-                setmessageContent("");
-            }, 3500);
-            // alert(response.data.message);
-        }
-    }).catch((err) => {
-        console.log(err);
+        })
+    }
+    else if(accountType == "none"){
         setloadingState(false)
-    })
+        setmessageContent("Please Select an Account Type!");
+        setmessageAlert(true);
+        setTimeout(() => {
+            setmessageAlert(false);
+        }, 3000);
+        setTimeout(() => {
+            setmessageContent("");
+        }, 3500);
+    }
   }
 
   const homerBtn = () => {
