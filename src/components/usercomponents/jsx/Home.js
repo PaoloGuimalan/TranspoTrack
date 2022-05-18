@@ -9,13 +9,15 @@ import HomeToggle from '@material-ui/icons/Home'
 import LogoutToggle from '@material-ui/icons/ExitToApp'
 import AccountToggle from '@material-ui/icons/Person'
 import AvRoutesToggle from '@material-ui/icons/Directions'
+import InfoToggleOn from '@material-ui/icons/Label'
+import InfoToggle from '@material-ui/icons/LabelOutlined'
 import { Link, useNavigate, Routes, Route } from 'react-router-dom';
 import CommuterIcon from '../imgs/commutericon.png';
 import DriverIcon from '../imgs/drivericon.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_COORDS, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
+import { SET_COORDS, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
 import RoutesConfig from './RoutesConfig';
 import Account from './Account';
 
@@ -41,6 +43,7 @@ function Map(){
   const dispatch = useDispatch();
   const initialPosition = useSelector(state => state.initialposition);
   const coords = useSelector(state => state.coords);
+  const infotoggle = useSelector(state => state.infotoggle);
   // const userDataDetails = useSelector(state => state.userdatadetails);
 
   const [livelist, setlivelist] = useState([]);
@@ -146,6 +149,7 @@ function Map(){
                         scaledSize: ls.userType == "Commuter"? new google.maps.Size(25, 27) : new google.maps.Size(27, 27),
                       }}  
                     />
+                    {infotoggle? (
                     <InfoWindow position={ls.coordinates} options={{disableAutoPan: true}}>
                       <nav className='infowindow_user'>
                         <li>
@@ -169,7 +173,7 @@ function Map(){
                           <p className='p_labels'><b>Destination: </b> {ls.destination}</p>
                         </li>
                       </nav>
-                    </InfoWindow>
+                    </InfoWindow>) : ""}
                   </>
                 ) : ""
               )
@@ -236,6 +240,7 @@ function Home() {
   const userDataDetails = useSelector(state => state.userdatadetails);
   const initialPosition = useSelector(state => state.initialposition);
   const coords = useSelector(state => state.coords);
+  const infotoggle = useSelector(state => state.infotoggle);
 
   useEffect(() => {
     if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
@@ -295,6 +300,14 @@ function Home() {
                 scale: 1.2
               }}
               className='btn_navigations_toggle' onClick={() => navigate("/home/avroutes")}><AvRoutesToggle /></motion.button>
+            </li>
+            <li className='li_nav_navigations'>
+              <motion.button 
+              whileHover={{
+                scale: 1.2
+              }}
+              title='Toggle User Details'
+              className='btn_navigations_toggle' onClick={() => {dispatch({type: SET_INFO_TOGGLE, infotoggle: !infotoggle})}}>{infotoggle? <InfoToggleOn style={{color: "lime"}} /> : <InfoToggle style={{color: "red"}} />}</motion.button>
             </li>
             <li className='li_nav_navigations'>
               <motion.button 

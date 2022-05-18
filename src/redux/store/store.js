@@ -1,10 +1,11 @@
 import { createStore, combineReducers } from 'redux';
-import { setcoords, setinitialPosition, setuserdetails } from '../action/action';
+import { setcoords, setinfotoggle, setinitialPosition, setuserdetails } from '../action/action';
 
 const combiner = combineReducers({
     userdatadetails: setuserdetails,
     initialposition: setinitialPosition,
-    coords: setcoords
+    coords: setcoords,
+    infotoggle: setinfotoggle
 });
 
 const store = createStore(combiner);

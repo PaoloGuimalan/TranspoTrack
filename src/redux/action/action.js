@@ -1,4 +1,4 @@
-import { SET_COORDS, SET_INTITIAL_POSITION, USER_DETAILS } from "../types/types";
+import { SET_COORDS, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from "../types/types";
 
 const userdatadetailsstate = {
     userID: '',
@@ -32,6 +32,15 @@ export const setcoords = (state = { lat: "", lng: "" }, action) => {
     switch(action.type){
         case SET_COORDS:
             return action.coords;
+        default:
+            return state;
+    }
+}
+
+export const setinfotoggle = (state = false, action) => {
+    switch(action.type){
+        case SET_INFO_TOGGLE:
+            return action.infotoggle;
         default:
             return state;
     }
