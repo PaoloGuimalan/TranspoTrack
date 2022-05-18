@@ -187,6 +187,8 @@ const MapRoute = () => {
   const userDataDetails = useSelector(state => state.userdatadetails);
   const coords = useSelector(state => state.coords);
 
+  const [loaderInMap, setloaderInMap] = useState(false);
+
   return(
     <div style={{ width: "100%", height: "100vh"}}>
       <div id='div_user_shortcut_details'>
@@ -198,8 +200,16 @@ const MapRoute = () => {
             <p className='labeltext_user_shortcut_details'><b>Current Destination:</b> {"Not Applied"}</p>
           </li>
           <li>
-            <p className='labeltext_user_shortcut_details last_labeltext'><b>In Map Location</b></p>
-            <p>Lat: {coords.lat}<br />Lng: {coords.lng}</p>
+            <button className='labeltext_user_shortcut_details last_labeltext' onClick={() => {setloaderInMap(!loaderInMap)}}>In Map Location</button>
+            <motion.p
+            initial={{
+              display: "none"
+            }}
+            animate={{
+              display: loaderInMap? "block" : "none"
+            }}
+            className='latlng_text'
+            >Lat: {coords.lat}<br />Lng: {coords.lng}</motion.p>
           </li>
         </nav>
       </div>
