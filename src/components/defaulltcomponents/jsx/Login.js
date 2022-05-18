@@ -92,6 +92,14 @@ function Login() {
         }).catch((err) => {
             console.log(err);
             setloadingState(false)
+            setmessageContent("Login Unsuccessful!");
+            setmessageAlert(true);
+            setTimeout(() => {
+                setmessageAlert(false);
+            }, 3000);
+            setTimeout(() => {
+                setmessageContent("");
+            }, 3500);
         })
     }
     else if(accountType == "none"){

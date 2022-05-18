@@ -3,6 +3,7 @@ import '../css/LoginRegister.css';
 import { Link, useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { URL_TWO } from '../../../variables';
+import { motion } from 'framer-motion';
 
 function Register() {
 
@@ -20,71 +21,236 @@ function Register() {
   const [dlicense, setdlicense] = useState("");
   const [age, setage] = useState("");
 
+  const [loadingState, setloadingState] = useState(false);
+  const [messageAlert, setmessageAlert] = useState(false);
+  const [messageContent, setmessageContent] = useState("");
+
   const registersubmit = (acctype) => {
-      if(acctype == "Commuter"){
-        if(confpass == pass){
-            Axios.post(`https://${URL_TWO}/registercommuter`, {
-                firstName: firstName,
-                middleName: middleName,
-                lastName: lastName,
-                mobileNumber: mobileNumber,
-                email: email,
-                confpass: confpass,
-                pass: pass
-            }).then((response) => {
-                if(response.data.status){
-                    setfirstName("")
-                    setmiddleName("")
-                    setlastName("")
-                    setmobileNumber("")
-                    setemail("")
-                    setconfpass("")
-                    setpass("")
-                }
-            }).catch((err) => {
-                console.log(err);
-            })
-        }
-        else{
-            alert("Password not match!");
-        }
+      setloadingState(true);
+      if(firstName == "" || lastName == "" || mobileNumber == "" || email == "" || confpass == "" || pass == ""){
+        setloadingState(false)
+        setmessageContent("Please Complete the Form!");
+        setmessageAlert(true);
+        setTimeout(() => {
+            setmessageAlert(false);
+        }, 3000);
+        setTimeout(() => {
+            setmessageContent("");
+        }, 3500);
       }
-      else if(acctype == "Driver"){
-        if(confpass == pass){
-            Axios.post(`https://${URL_TWO}/registerdriver`, {
-                firstName: firstName,
-                middleName: middleName,
-                lastName: lastName,
-                mobileNumber: mobileNumber,
-                email: email,
-                confpass: confpass,
-                pass: pass,
-                dlicense: dlicense,
-                age: age
-            }).then((response) => {
-                if(response.data.status){
-                    setfirstName("")
-                    setmiddleName("")
-                    setlastName("")
-                    setmobileNumber("")
-                    setemail("")
-                    setconfpass("")
-                    setpass("")
-                    setdlicense("")
-                    setage("")
+      else{
+        if(acctype == "Commuter"){
+            if(confpass == pass){
+                Axios.post(`https://${URL_TWO}/registercommuter`, {
+                    firstName: firstName,
+                    middleName: middleName == ""? "N/A" : middleName,
+                    lastName: lastName,
+                    mobileNumber: mobileNumber,
+                    email: email,
+                    confpass: confpass,
+                    pass: pass
+                }).then((response) => {
+                    if(response.data.status){
+                        setfirstName("")
+                        setmiddleName("")
+                        setlastName("")
+                        setmobileNumber("")
+                        setemail("")
+                        setconfpass("")
+                        setpass("")
+                        setloadingState(false)
+                        setmessageContent(response.data.message);
+                        setmessageAlert(true);
+                        setTimeout(() => {
+                            setmessageAlert(false);
+                        }, 3000);
+                        setTimeout(() => {
+                            setmessageContent("");
+                        }, 3500);
+                    }
+                    else{
+                        setloadingState(false);
+                        setmessageContent(response.data.message);
+                        setmessageAlert(true);
+                        setTimeout(() => {
+                            setmessageAlert(false);
+                        }, 3000);
+                        setTimeout(() => {
+                            setmessageContent("");
+                        }, 3500);
+                    }
+                }).catch((err) => {
+                    // console.log(err);
+                    setloadingState(false);
+                    setmessageContent("Register Unsuccessful!");
+                    setmessageAlert(true);
+                    setTimeout(() => {
+                        setmessageAlert(false);
+                    }, 3000);
+                    setTimeout(() => {
+                        setmessageContent("");
+                    }, 3500);
+                })
+            }
+            else{
+                // alert("Password not match!");
+                setloadingState(false);
+                setmessageContent("Password not match!");
+                setmessageAlert(true);
+                setTimeout(() => {
+                    setmessageAlert(false);
+                }, 3000);
+                setTimeout(() => {
+                    setmessageContent("");
+                }, 3500);
+            }
+          }
+          else if(acctype == "Driver"){
+            if(firstName == "" || lastName == "" || mobileNumber == "" || email == "" || confpass == "" || pass == "" || dlicense == "" || age == ""){
+                setloadingState(false)
+                setmessageContent("Age not applied!");
+                setmessageAlert(true);
+                setTimeout(() => {
+                    setmessageAlert(false);
+                }, 3000);
+                setTimeout(() => {
+                    setmessageContent("");
+                }, 3500);
+            }
+            else{
+                if(confpass == pass){
+                    Axios.post(`https://${URL_TWO}/registerdriver`, {
+                        firstName: firstName,
+                        middleName: middleName == ""? "N/A" : middleName,
+                        lastName: lastName,
+                        mobileNumber: mobileNumber,
+                        email: email,
+                        confpass: confpass,
+                        pass: pass,
+                        dlicense: dlicense,
+                        age: age
+                    }).then((response) => {
+                        if(response.data.status){
+                            setfirstName("")
+                            setmiddleName("")
+                            setlastName("")
+                            setmobileNumber("")
+                            setemail("")
+                            setconfpass("")
+                            setpass("")
+                            setdlicense("")
+                            setage("")
+                            setmessageContent(response.data.message);
+                            setloadingState(false);
+                            setmessageAlert(true);
+                            setTimeout(() => {
+                                setmessageAlert(false);
+                            }, 3000);
+                            setTimeout(() => {
+                                setmessageContent("");
+                            }, 3500);
+                        }
+                        else{
+                            setloadingState(false);
+                            setmessageContent(response.data.message);
+                            setmessageAlert(true);
+                            setTimeout(() => {
+                                setmessageAlert(false);
+                            }, 3000);
+                            setTimeout(() => {
+                                setmessageContent("");
+                            }, 3500);
+                        }
+                    }).catch((err) => {
+                        // console.log(err);
+                        setloadingState(false)
+                        setmessageContent("Registration Unsuccessful");
+                        setmessageAlert(true);
+                        setTimeout(() => {
+                            setmessageAlert(false);
+                        }, 3000);
+                        setTimeout(() => {
+                            setmessageContent("");
+                        }, 3500);
+                    })
                 }
-            }).catch((err) => {
-                console.log(err);
-            })
-        }
-        else{
-            alert("Password not match!");
-        }
+                else{
+                    setloadingState(false);
+                    setmessageContent("Password not match!");
+                    setmessageAlert(true);
+                    setTimeout(() => {
+                        setmessageAlert(false);
+                    }, 3000);
+                    setTimeout(() => {
+                        setmessageContent("");
+                    }, 3500);
+                    // alert("Password not match!");
+                }
+            }
+          }
       }
   }
 
   return (
     <div id='login_div'>
+        <motion.div className='notifier'
+        animate={{
+            left: messageAlert? "5px" : "-100%"
+        }}
+
+        transition={{
+            duration: 0.5
+        }}
+        >
+            <p>{messageContent}</p>
+        </motion.div>
+        <motion.div 
+        animate={{
+            display: loadingState? "flex" : "none"
+        }}
+        id='loading_icon'>
+            <motion.div 
+            initial={{
+                height: "10%"
+            }} 
+            animate={{
+                height: "60%"
+            }} 
+            transition={{
+                duration: 0.7,
+                yoyo: Infinity,
+                bounce: 0
+            }}
+            className='loader_bars'></motion.div>
+            <motion.div 
+            initial={{
+                height: "10%"
+            }}
+            animate={{
+                height: "60%"
+            }}
+            transition={{
+                delay: 0.2,
+                duration: 0.7,
+                yoyo: Infinity,
+                bounce: 0
+            }} 
+            className='loader_bars'></motion.div>
+            <motion.div 
+            initial={{
+                height: "10%"
+            }}
+            animate={{
+                height: "60%"
+            }}
+            transition={{
+                delay: 0.5,
+                duration: 0.7,
+                yoyo: Infinity,
+                bounce: 0
+            }} 
+            className='loader_bars'></motion.div>
+        </motion.div>
         <nav id='nav_login'>
             <li className='li_register'>
                     <nav>
