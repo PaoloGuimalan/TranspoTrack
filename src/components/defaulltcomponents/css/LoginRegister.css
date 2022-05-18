@@ -129,6 +129,19 @@
     border-radius: 10px;
 }
 
+.notifier{
+    position: fixed;
+    background-color: rgb(70, 70, 70);
+    color: white;
+    width: 100%;
+    height: auto;
+    max-width: 200px;
+    border-radius: 5px;
+    left: -100%;
+    top: 5px;
+    font-size: 13px;
+}
+
 @media screen and (max-width: 720px) {
     .li_login:first-of-type{
         width: 100%;

@@ -19,6 +19,9 @@ function Login() {
 
   const [authenticationMark, setauthenticationMark] = useState(false);
 
+  const [messageAlert, setmessageAlert] = useState(false);
+  const [messageContent, setmessageContent] = useState("");
+
 //   useEffect(() => {
 //     const commuter = localStorage.getItem('tokencommuter');
 //     const driver = localStorage.getItem('tokendriver');
@@ -45,18 +48,44 @@ function Login() {
                 localStorage.setItem("tokencommuter", response.data.token);
                 setemail("");
                 setpassword("");
-                navigate("/home");
+                setmessageContent(response.data.message);
+                setmessageAlert(true);
+                setTimeout(() => {
+                    setmessageAlert(false);
+                }, 3000);
+                setTimeout(() => {
+                    setmessageContent("");
+                    navigate("/home");
+                }, 3500);
+                // navigate("/home");
             }
             else if(accountType == "Driver"){
                 setloadingState(false)
                 localStorage.setItem("tokendriver", response.data.token);
                 setemail("");
                 setpassword("");
-                navigate("/home");
+                setmessageContent(response.data.message);
+                setmessageAlert(true);
+                setTimeout(() => {
+                    setmessageAlert(false);
+                }, 3000);
+                setTimeout(() => {
+                    setmessageContent("");
+                    navigate("/home");
+                }, 3500);
+                // navigate("/home");
             }
         }
         else{
             setloadingState(false)
+            setmessageContent(response.data.message);
+            setmessageAlert(true);
+            setTimeout(() => {
+                setmessageAlert(false);
+            }, 3000);
+            setTimeout(() => {
+                setmessageContent("");
+            }, 3500);
             // alert(response.data.message);
         }
     }).catch((err) => {
@@ -71,6 +100,17 @@ function Login() {
 
   return (
     <div id='login_div'>
+        <motion.div className='notifier'
+        animate={{
+            left: messageAlert? "5px" : "-100%"
+        }}
+
+        transition={{
+            duration: 0.5
+        }}
+        >
+            <p>{messageContent}</p>
+        </motion.div>
         <motion.div 
         animate={{
             display: loadingState? "flex" : "none"
