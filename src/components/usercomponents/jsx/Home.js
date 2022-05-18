@@ -296,9 +296,9 @@ function Home() {
         socketIdentifier({
           userID: userDataDetails.userID,
           userType: userDataDetails.userType,
-          destination: drivertraveldata.destination,
-          route: `${drivertraveldata.destination_one} - ${drivertraveldata.destination_two}`,
-          vehicle: drivertraveldata.vehicle,
+          destination: alltraveldata.destination,
+          route: `${alltraveldata.destination_one} - ${alltraveldata.destination_two}`,
+          vehicle: alltraveldata.vehicle,
           coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
         }, userDataDetails.userType)
       })
