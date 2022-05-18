@@ -246,7 +246,7 @@ function Home() {
   const infotoggle = useSelector(state => state.infotoggle);
 
   const commutertraveldata = useSelector(state => state.commutertraveldata);
-  const drivertraveldata = useSelector(state => state.drivertraveldata);
+  const alltraveldata = useSelector(state => state.drivertraveldata);
 
   useEffect(() => {
     if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
@@ -263,7 +263,7 @@ function Home() {
         }
       }).then((response) => {
         if(response.data.status){
-          dispatch({type: SET_COMMUTER_TRAVEL_DATA, commutertraveldata: response.data.result});
+          dispatch({type: SET_DRIVER_TRAVEL_DATA, drivertraveldata: response.data.result});
         }
       }).catch((err) => {
         //alert error
@@ -296,9 +296,9 @@ function Home() {
         socketIdentifier({
           userID: userDataDetails.userID,
           userType: userDataDetails.userType,
-          destination: userDataDetails.userType == "Commuter"? commutertraveldata.destination : drivertraveldata.destination,
-          route: userDataDetails.userType == "Commuter"? "Invalid" : `${drivertraveldata.destination_one} - ${drivertraveldata.destination_two}`,
-          vehicle: userDataDetails.userType == "Commuter"? "Invalid" : drivertraveldata.vehicle,
+          destination: drivertraveldata.destination,
+          route: `${drivertraveldata.destination_one} - ${drivertraveldata.destination_two}`,
+          vehicle: drivertraveldata.vehicle,
           coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
         }, userDataDetails.userType)
       })
