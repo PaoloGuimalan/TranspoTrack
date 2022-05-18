@@ -1,4 +1,4 @@
-import { SET_COORDS, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from "../types/types";
+import { SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from "../types/types";
 
 const userdatadetailsstate = {
     userID: '',
@@ -41,6 +41,39 @@ export const setinfotoggle = (state = false, action) => {
     switch(action.type){
         case SET_INFO_TOGGLE:
             return action.infotoggle;
+        default:
+            return state;
+    }
+}
+
+const commutertraveldatastate = {
+    userID: "",
+    userType: "",
+    destination: ""
+}
+
+const drivertraveldatastate = {
+    userID: "",
+    userType: "",
+    destination: "",
+    destination_one: "",
+    destination_two: "",
+    vehicle: ""
+}
+
+export const setcommutertraveldata = (state = commutertraveldatastate, action) => {
+    switch(action.type){
+        case SET_COMMUTER_TRAVEL_DATA:
+            return action.commutertraveldata;
+        default:
+            return state;
+    }
+}
+
+export const setdrivertraveldata = (state = drivertraveldatastate, action) => {
+    switch(action.type){
+        case SET_DRIVER_TRAVEL_DATA:
+            return action.drivertraveldata;
         default:
             return state;
     }

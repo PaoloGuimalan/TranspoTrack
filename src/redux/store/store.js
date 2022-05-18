@@ -1,11 +1,13 @@
 import { createStore, combineReducers } from 'redux';
-import { setcoords, setinfotoggle, setinitialPosition, setuserdetails } from '../action/action';
+import { setcommutertraveldata, setcoords, setdrivertraveldata, setinfotoggle, setinitialPosition, setuserdetails } from '../action/action';
 
 const combiner = combineReducers({
     userdatadetails: setuserdetails,
     initialposition: setinitialPosition,
     coords: setcoords,
-    infotoggle: setinfotoggle
+    infotoggle: setinfotoggle,
+    commutertraveldata: setcommutertraveldata,
+    drivertraveldata: setdrivertraveldata
 });
 
 const store = createStore(combiner);

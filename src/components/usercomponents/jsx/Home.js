@@ -17,7 +17,7 @@ import DriverIcon from '../imgs/drivericon.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_COORDS, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
+import { SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
 import RoutesConfig from './RoutesConfig';
 import Account from './Account';
 
@@ -160,14 +160,14 @@ function Map(){
                           display: ls.userType == "Driver"? "block" : "none"
                         }}
                         >
-                          <p className='p_labels'><b>Route: </b> {"No Applied"}</p>
+                          <p className='p_labels'><b>Route: </b> {ls.route}</p>
                         </motion.li>
                         <motion.li
                         animate={{
                           display: ls.userType == "Driver"? "block" : "none"
                         }}
                         >
-                          <p className='p_labels'><b>Vehicle: </b> {"No Applied"}</p>
+                          <p className='p_labels'><b>Vehicle: </b> {ls.vehicle}</p>
                         </motion.li>
                         <li>
                           <p className='p_labels'><b>Destination: </b> {ls.destination}</p>
@@ -191,6 +191,9 @@ const MapRoute = () => {
   const userDataDetails = useSelector(state => state.userdatadetails);
   const coords = useSelector(state => state.coords);
 
+  const commutertraveldata = useSelector(state => state.commutertraveldata);
+  const drivertraveldata = useSelector(state => state.drivertraveldata);
+
   const [loaderInMap, setloaderInMap] = useState(false);
 
   return(
@@ -201,7 +204,7 @@ const MapRoute = () => {
             <p className='labeltext_user_shortcut_details'><b>User ID:</b> {userDataDetails.userID}</p>
           </li>
           <li>
-            <p className='labeltext_user_shortcut_details'><b>Current Destination:</b> {"Not Applied"}</p>
+            <p className='labeltext_user_shortcut_details'><b>Current Destination:</b> {userDataDetails.userType == "Commuter"? commutertraveldata.destination : drivertraveldata.destination}</p>
           </li>
           <li>
             <button className='labeltext_user_shortcut_details last_labeltext' onClick={() => {setloaderInMap(!loaderInMap)}}>In Map Location</button>
@@ -242,11 +245,44 @@ function Home() {
   const coords = useSelector(state => state.coords);
   const infotoggle = useSelector(state => state.infotoggle);
 
+  const commutertraveldata = useSelector(state => state.commutertraveldata);
+  const drivertraveldata = useSelector(state => state.drivertraveldata);
+
   useEffect(() => {
     if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
         navigate("/login");
         return;
     }
+  }, [driver, commuter])
+
+  useEffect(() => {
+    if((commuter != "" || commuter != null) && (driver == "" || driver == null)){
+      Axios.get(`https://${URL_TWO}/userTravel/${"Commuter"}`, {
+        headers:{
+          "x-access-tokencommuter": localStorage.getItem('tokencommuter')
+        }
+      }).then((response) => {
+        if(response.data.status){
+          dispatch({type: SET_COMMUTER_TRAVEL_DATA, commutertraveldata: response.data.result});
+        }
+      }).catch((err) => {
+        //alert error
+      })
+    }
+    else if((commuter == "" || commuter == null) && (driver != "" || driver != null)){
+      Axios.get(`https://${URL_TWO}/userTravel/${"Driver"}`, {
+        headers:{
+          "x-access-tokendriver": localStorage.getItem('tokendriver')
+        }
+      }).then((response) => {
+        if(response.data.status){
+          dispatch({type: SET_DRIVER_TRAVEL_DATA, drivertraveldata: response.data.result});
+        }
+      }).catch((err) => {
+        //alert error
+      })
+    }
+    // console.log(commutertraveldata, drivertraveldata)
   }, [driver, commuter])
 
   useEffect(() => {
@@ -260,8 +296,9 @@ function Home() {
         socketIdentifier({
           userID: userDataDetails.userID,
           userType: userDataDetails.userType,
-          address: "Commonwealth, Quezon City",
-          destination: "Not Applied",
+          destination: userDataDetails.userType == "Commuter"? commutertraveldata.destination : drivertraveldata.destination,
+          route: userDataDetails.userType == "Commuter"? "Invalid" : `${drivertraveldata.destination_one} - ${drivertraveldata.destination_two}`,
+          vehicle: userDataDetails.userType == "Commuter"? "Invalid" : drivertraveldata.vehicle,
           coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
         }, userDataDetails.userType)
       })
