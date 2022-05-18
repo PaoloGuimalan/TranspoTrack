@@ -33,7 +33,7 @@ function RoutesConfig() {
       }, 4000)
     }
     else{
-      Axios.post(`http://localhost:3001/commuterUpdateDestination`, {
+      Axios.post(`https://${URL_TWO}/commuterUpdateDestination`, {
         userID: userDataDetails.userID,
         destination: destinationinputvalue
       }, {
