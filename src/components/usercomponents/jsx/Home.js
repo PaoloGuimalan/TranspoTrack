@@ -30,21 +30,21 @@ function Map(){
 
   //NEED TO BE MOVED TO HOME MAIN COMPONENT AND ACCESS DATA THROUGH REDUX
   
-  const [userDataDetails, setuserDataDetails] = useState({
-    userID: '',
-    userType: '',
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    mobileNumber: '',
-    email: ''
-  });
+  // const [userDataDetails, setuserDataDetails] = useState({
+  //   userID: '',
+  //   userType: '',
+  //   firstName: '',
+  //   middleName: '',
+  //   lastName: '',
+  //   mobileNumber: '',
+  //   email: ''
+  // });
 
   const dispatch = useDispatch();
   const initialPosition = useSelector(state => state.initialposition);
   const coords = useSelector(state => state.coords);
   const infotoggle = useSelector(state => state.infotoggle);
-  // const userDataDetails = useSelector(state => state.userdatadetails);
+  const userDataDetails = useSelector(state => state.userdatadetails);
 
   const [livelist, setlivelist] = useState([]);
 
@@ -58,34 +58,34 @@ function Map(){
     }, 1000);
   }, [])
 
-  useEffect(() => {
-    if((commuter != "" || commuter != null) && (driver == "" || driver == null)){
-        Axios.get(`https://${URL_TWO}/userData`, {
-          headers:{
-            "x-access-tokencommuter": localStorage.getItem('tokencommuter')
-          }
-        }).then((response) => {
-          // console.log(response.data);
-          setuserDataDetails(response.data);
-          dispatch({type: USER_DETAILS, userdatadetails: response.data})
-        }).catch((err) => {
-          console.log(err);
-        })
-    }
-    else if((commuter == "" || commuter == null) && (driver != "" || driver != null)){
-      Axios.get(`https://${URL_TWO}/userData`, {
-        headers:{
-          "x-access-tokendriver": localStorage.getItem('tokendriver')
-        }
-      }).then((response) => {
-        // console.log(response.data);
-        setuserDataDetails(response.data);
-        dispatch({type: USER_DETAILS, userdatadetails: response.data})
-      }).catch((err) => {
-        console.log(err);
-      })
-    }
-  }, [driver, commuter])
+  // useEffect(() => {
+  //   if((commuter != "" || commuter != null) && (driver == "" || driver == null)){
+  //       Axios.get(`https://${URL_TWO}/userData`, {
+  //         headers:{
+  //           "x-access-tokencommuter": localStorage.getItem('tokencommuter')
+  //         }
+  //       }).then((response) => {
+  //         // console.log(response.data);
+  //         // setuserDataDetails(response.data);
+  //         dispatch({type: USER_DETAILS, userdatadetails: response.data})
+  //       }).catch((err) => {
+  //         console.log(err);
+  //       })
+  //   }
+  //   else if((commuter == "" || commuter == null) && (driver != "" || driver != null)){
+  //     Axios.get(`https://${URL_TWO}/userData`, {
+  //       headers:{
+  //         "x-access-tokendriver": localStorage.getItem('tokendriver')
+  //       }
+  //     }).then((response) => {
+  //       // console.log(response.data);
+  //       // setuserDataDetails(response.data);
+  //       dispatch({type: USER_DETAILS, userdatadetails: response.data})
+  //     }).catch((err) => {
+  //       console.log(err);
+  //     })
+  //   }
+  // }, [driver, commuter])
 
   // useEffect(() => {
   //   setInterval(() => {
@@ -192,7 +192,7 @@ const MapRoute = () => {
   const coords = useSelector(state => state.coords);
 
   const commutertraveldata = useSelector(state => state.commutertraveldata);
-  const drivertraveldata = useSelector(state => state.drivertraveldata);
+  const alltraveldata = useSelector(state => state.drivertraveldata);
 
   const [loaderInMap, setloaderInMap] = useState(false);
 
@@ -204,7 +204,7 @@ const MapRoute = () => {
             <p className='labeltext_user_shortcut_details'><b>User ID:</b> {userDataDetails.userID}</p>
           </li>
           <li>
-            <p className='labeltext_user_shortcut_details'><b>Current Destination:</b> {userDataDetails.userType == "Commuter"? commutertraveldata.destination : drivertraveldata.destination}</p>
+            <p className='labeltext_user_shortcut_details'><b>Current Destination:</b> {alltraveldata.destination}</p>
           </li>
           <li>
             <button className='labeltext_user_shortcut_details last_labeltext' onClick={() => {setloaderInMap(!loaderInMap)}}>In Map Location</button>
@@ -252,6 +252,35 @@ function Home() {
     if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
         navigate("/login");
         return;
+    }
+  }, [driver, commuter])
+
+  useEffect(() => {
+    if((commuter != "" || commuter != null) && (driver == "" || driver == null)){
+        Axios.get(`https://${URL_TWO}/userData`, {
+          headers:{
+            "x-access-tokencommuter": localStorage.getItem('tokencommuter')
+          }
+        }).then((response) => {
+          // console.log(response.data);
+          // setuserDataDetails(response.data);
+          dispatch({type: USER_DETAILS, userdatadetails: response.data})
+        }).catch((err) => {
+          console.log(err);
+        })
+    }
+    else if((commuter == "" || commuter == null) && (driver != "" || driver != null)){
+      Axios.get(`https://${URL_TWO}/userData`, {
+        headers:{
+          "x-access-tokendriver": localStorage.getItem('tokendriver')
+        }
+      }).then((response) => {
+        // console.log(response.data);
+        // setuserDataDetails(response.data);
+        dispatch({type: USER_DETAILS, userdatadetails: response.data})
+      }).catch((err) => {
+        console.log(err);
+      })
     }
   }, [driver, commuter])
 

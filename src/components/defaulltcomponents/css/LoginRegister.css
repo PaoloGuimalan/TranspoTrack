@@ -140,6 +140,7 @@
     left: -100%;
     top: 5px;
     font-size: 13px;
+    z-index: 3;
 }
 
 .notifier_reg{
