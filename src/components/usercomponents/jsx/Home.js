@@ -246,7 +246,7 @@ function Home() {
           userID: userDataDetails.userID,
           userType: userDataDetails.userType,
           address: "Commonwealth, Quezon City",
-          destination: "Lagro",
+          destination: "Not Applied",
           coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
         }, userDataDetails.userType)
       })
