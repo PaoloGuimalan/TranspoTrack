@@ -120,6 +120,12 @@ function Map(){
             defaultZoom={17} 
             defaultCenter={initialPosition}
             center={coords}
+            options={{
+              gestureHandling:'greedy',
+              zoomControlOptions: { position: 3 },
+              streetViewControl:false,
+              fullscreenControl:true,
+            }}
           >
             <Marker 
               title='Your Location'
@@ -199,7 +205,7 @@ const MapRoute = () => {
   const [loaderInMap, setloaderInMap] = useState(false);
 
   return(
-    <div style={{ width: "100%", height: "100%"}}>
+    <div style={{ width: "100%", height: "100vh"}}>
       <div id='div_user_shortcut_details'>
         <nav id='nav_user_shortcut_details'>
           <li>
