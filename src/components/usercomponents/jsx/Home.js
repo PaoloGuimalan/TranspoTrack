@@ -199,7 +199,7 @@ const MapRoute = () => {
   const [loaderInMap, setloaderInMap] = useState(false);
 
   return(
-    <div style={{ width: "100%", height: "100vh"}}>
+    <div style={{ width: "100%", height: "100%"}}>
       <div id='div_user_shortcut_details'>
         <nav id='nav_user_shortcut_details'>
           <li>
