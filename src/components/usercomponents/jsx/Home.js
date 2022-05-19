@@ -11,13 +11,14 @@ import AccountToggle from '@material-ui/icons/Person'
 import AvRoutesToggle from '@material-ui/icons/Directions'
 import InfoToggleOn from '@material-ui/icons/Label'
 import InfoToggle from '@material-ui/icons/LabelOutlined'
+import CenterOn from '@material-ui/icons/CenterFocusStrong'
 import { Link, useNavigate, Routes, Route } from 'react-router-dom';
 import CommuterIcon from '../imgs/commutericon.png';
 import DriverIcon from '../imgs/drivericon.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
+import { SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
 import RoutesConfig from './RoutesConfig';
 import Account from './Account';
 
@@ -118,6 +119,7 @@ function Map(){
           <GoogleMap 
             defaultZoom={19} 
             defaultCenter={initialPosition}
+            center={coords}
           >
             <Marker 
               title='Your Location'
@@ -255,6 +257,7 @@ function Home() {
   const initialPosition = useSelector(state => state.initialposition);
   const coords = useSelector(state => state.coords);
   const infotoggle = useSelector(state => state.infotoggle);
+  const centeren = useSelector(state => state.centeren);
 
   const commutertraveldata = useSelector(state => state.commutertraveldata);
   const alltraveldata = useSelector(state => state.drivertraveldata);
@@ -391,6 +394,13 @@ function Home() {
               }}
               title='Toggle User Details'
               className='btn_navigations_toggle' onClick={() => {dispatch({type: SET_INFO_TOGGLE, infotoggle: !infotoggle})}}>{infotoggle? <InfoToggleOn style={{color: "lime"}} /> : <InfoToggle style={{color: "red"}} />}</motion.button>
+            </li>
+            <li className='li_nav_navigations'>
+              <motion.button 
+              whileHover={{
+                scale: 1.2
+              }}
+              className='btn_navigations_toggle' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}} ><CenterOn style={{color: centeren? "lime" : "red"}} /></motion.button>
             </li>
             <li className='li_nav_navigations'>
               <motion.button 

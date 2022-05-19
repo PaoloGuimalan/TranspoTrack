@@ -1,4 +1,4 @@
-import { SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from "../types/types";
+import { SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from "../types/types";
 
 const userdatadetailsstate = {
     userID: '',
@@ -74,6 +74,15 @@ export const setdrivertraveldata = (state = drivertraveldatastate, action) => {
     switch(action.type){
         case SET_DRIVER_TRAVEL_DATA:
             return action.drivertraveldata;
+        default:
+            return state;
+    }
+}
+
+export const setcenteren = (state = false, action) => {
+    switch(action.type){
+        case SET_CENTER_EN:
+            return action.centeren;
         default:
             return state;
     }
