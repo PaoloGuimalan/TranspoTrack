@@ -10,9 +10,13 @@ function RoutesConfig() {
 
   const dispatch = useDispatch();
   const userDataDetails = useSelector(state => state.userdatadetails);
+  const alltraveldata = useSelector(state => state.drivertraveldata);
 
   const [displaydestinationinput, setdisplaydestinationinput] = useState("none");
   const [destinationinputvalue, setdestinationinputvalue] = useState("");
+
+  const [destinationOne, setdestinationOne] = useState("");
+  const [destinationTwo, setdestinationTwo] = useState("");
 
   const [messageAlert, setmessageAlert] = useState(false);
   const [messageContent, setmessageContent] = useState("");
@@ -33,15 +37,143 @@ function RoutesConfig() {
       }, 4000)
     }
     else{
-      Axios.post(`https://${URL_TWO}/commuterUpdateDestination`, {
+      if(userDataDetails.userType == "Commuter"){
+        Axios.post(`https://${URL_TWO}/commuterUpdateDestination`, {
+          userID: userDataDetails.userID,
+          userType: userDataDetails.userType,
+          destination: destinationinputvalue
+        }, {
+          headers:{
+            "x-access-tokencommuter": localStorage.getItem('tokencommuter'),
+          }
+        }).then((response) => {
+          if(response.data.status){
+            setmessageContent(response.data.message);
+            setdestinationinputvalue("")
+            setTimeout(() => {
+              setmessageAlert(true);
+            }, 500);
+            setTimeout(() => {
+              setmessageAlert(false);
+            }, 3500);
+            setTimeout(() => {
+              setmessageContent("");
+            }, 4000)
+
+            //Axios -> Dispatch -> Display
+
+            Axios.get(`https://${URL_TWO}/userTravel/${userDataDetails.userType}`, {
+                headers:{
+                  "x-access-tokencommuter": localStorage.getItem('tokencommuter')
+                }
+              }).then((response) => {
+                if(response.data.status){
+                  dispatch({type: SET_DRIVER_TRAVEL_DATA, drivertraveldata: response.data.result});
+                }
+              }).catch((err) => {
+                //alert error
+              })
+          }
+          else{
+            setmessageContent(response.data.message);
+            setdestinationinputvalue("")
+            setTimeout(() => {
+              setmessageAlert(true);
+            }, 500);
+            setTimeout(() => {
+              setmessageAlert(false);
+            }, 3500);
+            setTimeout(() => {
+              setmessageContent("");
+            }, 4000)
+          }
+        }).catch((err) => {
+          // console.log(err);
+        })
+      }
+      else if(userDataDetails.userType == "Driver"){
+        Axios.post(`https://${URL_TWO}/commuterUpdateDestination`, {
+          userID: userDataDetails.userID,
+          userType: userDataDetails.userType,
+          destination: destinationinputvalue
+        }, {
+          headers:{
+            "x-access-tokendriver": localStorage.getItem('tokendriver'),
+          }
+        }).then((response) => {
+          if(response.data.status){
+            setmessageContent(response.data.message);
+            setdestinationinputvalue("")
+            setTimeout(() => {
+              setmessageAlert(true);
+            }, 500);
+            setTimeout(() => {
+              setmessageAlert(false);
+            }, 3500);
+            setTimeout(() => {
+              setmessageContent("");
+            }, 4000)
+
+            //Axios -> Dispatch -> Display
+
+            Axios.get(`https://${URL_TWO}/userTravel/${userDataDetails.userType}`, {
+                headers:{
+                  "x-access-tokendriver": localStorage.getItem('tokendriver')
+                }
+              }).then((response) => {
+                if(response.data.status){
+                  dispatch({type: SET_DRIVER_TRAVEL_DATA, drivertraveldata: response.data.result});
+                }
+              }).catch((err) => {
+                //alert error
+              })
+          }
+          else{
+            setmessageContent(response.data.message);
+            setdestinationinputvalue("")
+            setTimeout(() => {
+              setmessageAlert(true);
+            }, 500);
+            setTimeout(() => {
+              setmessageAlert(false);
+            }, 3500);
+            setTimeout(() => {
+              setmessageContent("");
+            }, 4000)
+          }
+        }).catch((err) => {
+          // console.log(err);
+        })
+      }
+    }
+  }
+
+  const saveRouteBtn = () => {
+    if(destinationOne == "" || destinationTwo == ""){
+      setmessageContent("Routes Value are Empty!");
+      setTimeout(() => {
+        setmessageAlert(true);
+      }, 500);
+      setTimeout(() => {
+        setmessageAlert(false);
+      }, 3500);
+      setTimeout(() => {
+        setmessageContent("");
+      }, 4000)
+    }
+    else{
+      Axios.post(`https://${URL_TWO}/driverUpdateRoute`, {
         userID: userDataDetails.userID,
-        destination: destinationinputvalue
+        destination_one: destinationOne,
+        destination_two: destinationTwo
       }, {
-        headers:{
-          "x-access-tokencommuter": localStorage.getItem('tokencommuter')
+        headers: {
+          "x-access-tokendriver": localStorage.getItem('tokendriver')
         }
       }).then((response) => {
         if(response.data.status){
+          setdestinationOne("");
+          setdestinationTwo("");
           setmessageContent(response.data.message);
           setdestinationinputvalue("")
           setTimeout(() => {
@@ -54,19 +186,19 @@ function RoutesConfig() {
             setmessageContent("");
           }, 4000)
 
-          //Axios -> Dispatch -> Display
+          //Axios Route re-Dispatch
 
-           Axios.get(`https://${URL_TWO}/userTravel/${"Commuter"}`, {
-              headers:{
-                "x-access-tokencommuter": localStorage.getItem('tokencommuter')
-              }
-            }).then((response) => {
-              if(response.data.status){
-                dispatch({type: SET_DRIVER_TRAVEL_DATA, drivertraveldata: response.data.result});
-              }
-            }).catch((err) => {
-              //alert error
-            })
+          Axios.get(`https://${URL_TWO}/userTravel/${userDataDetails.userType}`, {
+            headers:{
+              "x-access-tokendriver": localStorage.getItem('tokendriver')
+            }
+           }).then((response) => {
+            if(response.data.status){
+              dispatch({type: SET_DRIVER_TRAVEL_DATA, drivertraveldata: response.data.result});
+            }
+          }).catch((err) => {
+            //alert error
+          })
         }
         else{
           setmessageContent(response.data.message);
@@ -82,7 +214,17 @@ function RoutesConfig() {
           }, 4000)
         }
       }).catch((err) => {
-        // console.log(err);
+        setmessageContent("Problems have occured. Please try again later!");
+        setdestinationinputvalue("")
+        setTimeout(() => {
+          setmessageAlert(true);
+        }, 500);
+        setTimeout(() => {
+          setmessageAlert(false);
+        }, 3500);
+        setTimeout(() => {
+          setmessageContent("");
+        }, 4000)
       })
     }
   }
@@ -146,11 +288,11 @@ function RoutesConfig() {
         </motion.nav>
         <motion.nav id='nav_routes'
           animate={{
-            display: userDataDetails.userType == "Driver"? "none" : "none"
+            display: userDataDetails.userType == "Driver"? "flex" : "none"
           }}
         >
           <li>
-            <h4>Your Current Route</h4>
+            <h4>Driver Routes and Destination</h4>
           </li>
           <li>
             <span><button className='btns_destination' onClick={() => {setdisplaydestinationinput("input")}}>Type your Destination</button></span>
@@ -186,6 +328,19 @@ function RoutesConfig() {
           >
             <p id='labeltext_indic'>Select an Option.</p>
           </motion.li>
+          <li>
+            <h4>Fixed Routes</h4>
+          </li>
+          <li>
+            <p id='label_routes'>Current Route: {alltraveldata.destination_one} - {alltraveldata.destination_two}</p>
+          </li>
+          <li>
+            <input type='text' name='destination_one_value' id='destination_one_value' className='route_destinations_input' placeholder='First Destination' value={destinationOne} onChange={(e) => {setdestinationOne(e.target.value)}} />
+            <input type='text' name='destination_two_value' id='destination_two_value' className='route_destinations_input' placeholder='Second Destination' value={destinationTwo} onChange={(e) => {setdestinationTwo(e.target.value)}} />
+          </li>
+          <li>
+            <button id='route_save' onClick={() => {saveRouteBtn()}}>Save Route</button>
+          </li>
         </motion.nav>
         <nav id='nav_routes'>
           <li>

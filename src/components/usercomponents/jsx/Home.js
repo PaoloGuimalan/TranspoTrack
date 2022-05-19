@@ -207,6 +207,17 @@ const MapRoute = () => {
             <p className='labeltext_user_shortcut_details'><b>Current Destination:</b> {alltraveldata.destination}</p>
           </li>
           <li>
+            <motion.p
+              initial={{
+                display: "none"
+              }}
+              animate={{
+                display: userDataDetails.userType == "Driver"? loaderInMap? "block" : "none" : "none"
+              }}
+              className='labeltext_user_shortcut_details'
+              ><b>Route: </b>{alltraveldata.destination_one} - {alltraveldata.destination_two}</motion.p>
+          </li>
+          <li>
             <button className='labeltext_user_shortcut_details last_labeltext' onClick={() => {setloaderInMap(!loaderInMap)}}>In Map Location</button>
             <motion.p
             initial={{
