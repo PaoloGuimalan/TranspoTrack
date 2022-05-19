@@ -117,7 +117,7 @@ function Map(){
       <>
         {initialPosition.lat != "" && initialPosition.lng != ""? (
           <GoogleMap 
-            defaultZoom={19} 
+            defaultZoom={17} 
             defaultCenter={initialPosition}
             center={coords}
           >
@@ -132,7 +132,7 @@ function Map(){
             />
             <Circle
               center={coords} 
-              radius={30}
+              radius={100}
               options={{
                 strokeColor: userDataDetails.userType == "Commuter"? "lime" : "orange"
               }}
