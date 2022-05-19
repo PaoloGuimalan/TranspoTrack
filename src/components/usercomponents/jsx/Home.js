@@ -145,7 +145,7 @@ function Map(){
             />
             {livelist.map((ls) => {
               return(
-                userDataDetails.userID != ls.userID? (
+                userDataDetails.userID != ls.userID? userDataDetails.userType != ls.userType? (
                   <>
                     <Marker 
                       key={ls.userID}
@@ -183,7 +183,7 @@ function Map(){
                       </nav>
                     </InfoWindow>) : ""}
                   </>
-                ) : ""
+                ) : "" : ""
               )
             })}
           </GoogleMap>
