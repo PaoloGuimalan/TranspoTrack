@@ -377,7 +377,41 @@ function Home() {
         }}
       >
         <button onClick={() => {settogglemenu(!togglemenu)}} id='btn_menu'>{togglemenu? <Minimize /> : <Toggle />}</button>
-        {togglemenu? "": (
+        {togglemenu? (
+          <nav id='nav_exposed'>
+            <li>
+              <motion.p id='user_id_tag'
+                animate={{
+                  backgroundColor: userDataDetails.userType == "Commuter"? "lime" : "orange"
+                }}
+              >User ID: {userDataDetails.userID}</motion.p>
+            </li>
+            <li>
+              <h4 id='navigations_h4'>Navigations</h4>
+            </li>
+            <li>
+              <Link to='/home' className='links_tag_navigation'><p className='link_ptags'><span><HomeToggle style={{fontSize: "18px"}} /></span><span>Home</span></p></Link>
+            </li>
+            <li>
+              <Link to='/home/avroutes' className='links_tag_navigation'><p className='link_ptags'><span><AvRoutesToggle style={{fontSize: "18px"}} /></span><span>Routes / Destinations</span></p></Link>
+            </li>
+            <li>
+              <Link to='/home/account' className='links_tag_navigation'><p className='link_ptags'><span><AccountToggle style={{fontSize: "18px"}} /></span><span>Account</span></p></Link>
+            </li>
+            <li>
+              <h4 id='navigations_h4_2'>Controls</h4>
+            </li>
+            <li>
+              <p className='link_ptags' onClick={() => {dispatch({type: SET_INFO_TOGGLE, infotoggle: !infotoggle})}}><span>{infotoggle? <InfoToggleOn style={{color: "lime", fontSize: "18px"}} /> : <InfoToggle style={{color: "red", fontSize: "18px"}} />}</span><span>Show Details</span></p>
+            </li>
+            <li>
+              <p className='link_ptags' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}}><span><CenterOn style={{color: centeren? "lime" : "red", fontSize: "18px"}} /></span><span>Auto Focus</span></p>
+            </li>
+            <li>
+              <button id='btn_logout' onClick={logoutfunc}>Logout</button>
+            </li>
+          </nav>
+        ) : (
           <nav id='nav_navigation'>
             <li className='li_nav_navigations'>
               <motion.button 
@@ -398,6 +432,13 @@ function Home() {
               whileHover={{
                 scale: 1.2
               }}
+              className='btn_navigations_toggle' onClick={() => navigate("/home/account")}><AccountToggle /></motion.button>
+            </li>
+            <li className='li_nav_navigations'>
+              <motion.button 
+              whileHover={{
+                scale: 1.2
+              }}
               title='Toggle User Details'
               className='btn_navigations_toggle' onClick={() => {dispatch({type: SET_INFO_TOGGLE, infotoggle: !infotoggle})}}>{infotoggle? <InfoToggleOn style={{color: "lime"}} /> : <InfoToggle style={{color: "red"}} />}</motion.button>
             </li>
@@ -407,13 +448,6 @@ function Home() {
                 scale: 1.2
               }}
               className='btn_navigations_toggle' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}} ><CenterOn style={{color: centeren? "lime" : "red"}} /></motion.button>
-            </li>
-            <li className='li_nav_navigations'>
-              <motion.button 
-              whileHover={{
-                scale: 1.2
-              }}
-              className='btn_navigations_toggle' onClick={() => navigate("/home/account")}><AccountToggle /></motion.button>
             </li>
             <li className='li_nav_navigations'>
               <motion.button

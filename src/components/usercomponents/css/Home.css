@@ -11,6 +11,8 @@
     max-width: 60px;
     z-index: 2;
     background-color: white;
+    overflow-y: auto;
+    overflow-x: hidden;
     /* box-shadow: 0px 0px 3px black; */
 }
 
@@ -94,6 +96,76 @@
 
 .latlng_text{
     font-size: 13px;
+}
+
+#nav_exposed{
+    /* background-color: aqua; */
+    list-style-type: none;
+    justify-content: center;
+    padding: 5px;
+    margin-top: 0px;
+    display: flex;
+    width: calc(100% - 10px);
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+    overflow-x: hidden;
+}
+
+#navigations_h4{
+    margin: 0px;
+    margin-bottom: 10px;
+    text-align: left;
+    padding: 10px;
+}
+
+#navigations_h4_2{
+    margin: 0px;
+    margin-bottom: 10px;
+    text-align: left;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.link_ptags{
+    margin: 10px;
+    text-align: left;
+    display: flex;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.links_tag_navigation{
+    text-decoration: none;
+    color: black;
+}
+
+#btn_logout{
+    width: 150px;
+    height: 35px;
+    background-color: white;
+    border: solid 2px red;
+    color: red;
+    border-radius: 10px;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+#btn_logout:hover{
+    background-color: red;
+    color: white;
+}
+
+#user_id_tag{
+    text-align: center;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
 }
 
 @media screen and (max-width: 720px) {
