@@ -375,6 +375,10 @@ function Home() {
           backgroundColor: togglemenu? "white" : "transparent",
           boxShadow: togglemenu? "0px 0px 3px black" : "none"
         }}
+        transition={{
+          bounce: 0,
+          duration: 0.2
+        }}
       >
         <button onClick={() => {settogglemenu(!togglemenu)}} id='btn_menu'>{togglemenu? <Minimize /> : <Toggle />}</button>
         {togglemenu? (
