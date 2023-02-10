@@ -9,7 +9,7 @@ function Register() {
 
   const navigate = useNavigate();
 
-  const [regtype, setregtype] = useState("None");
+  const [regtype, setregtype] = useState("Driver");
 
   const [firstName, setfirstName] = useState("");
   const [middleName, setmiddleName] = useState("");
@@ -20,6 +20,8 @@ function Register() {
   const [pass, setpass] = useState("");
   const [dlicense, setdlicense] = useState("");
   const [age, setage] = useState("");
+
+  const [companyID, setcompanyID] = useState("")
 
   const [loadingState, setloadingState] = useState(false);
   const [messageAlert, setmessageAlert] = useState(false);
@@ -41,7 +43,7 @@ function Register() {
       else{
         if(acctype == "Commuter"){
             if(confpass == pass){
-                Axios.post(`https://${URL_TWO}/registercommuter`, {
+                Axios.post(`${URL_TWO}/registercommuter`, {
                     firstName: firstName,
                     middleName: middleName == ""? "N/A" : middleName,
                     lastName: lastName,
@@ -119,7 +121,7 @@ function Register() {
             }
             else{
                 if(confpass == pass){
-                    Axios.post(`https://${URL_TWO}/registerdriver`, {
+                    Axios.post(`${URL_TWO}/registerdriver`, {
                         firstName: firstName,
                         middleName: middleName == ""? "N/A" : middleName,
                         lastName: lastName,
@@ -128,7 +130,8 @@ function Register() {
                         confpass: confpass,
                         pass: pass,
                         dlicense: dlicense,
-                        age: age
+                        age: age,
+                        companyID: companyID
                     }).then((response) => {
                         if(response.data.status){
                             setfirstName("")
@@ -140,6 +143,7 @@ function Register() {
                             setpass("")
                             setdlicense("")
                             setage("")
+                            setcompanyID("")
                             setmessageContent(response.data.message);
                             setloadingState(false);
                             setmessageAlert(true);
@@ -254,18 +258,18 @@ function Register() {
         <nav id='nav_login'>
             <li className='li_register'>
                     <nav>
-                        <li>
+                        {/* <li>
                             <p id='label_login'>Select an Account Type</p>
-                        </li>
+                        </li> */}
                         <li className='li_reg_nav'>
                             <nav>
-                                <li>
+                                {/* <li>
                                     <select className='input_login' onChange={(e) => {setregtype(e.target.value)}}>
                                         <option value="None">--Select Type--</option>
                                         <option value="Commuter">Commuter</option>
                                         <option value="Driver">Driver</option>
                                     </select>
-                                </li>
+                                </li> */}
                                 <li>
                                 {regtype == "None"? (
                                         ""
@@ -277,7 +281,7 @@ function Register() {
                                                 </li>
                                                 <li>
                                                     <nav>
-                                                    <li>
+                                                        <li>
                                                             <input type='text' placeholder='First Name' className='input_login' onChange={(e) => {setfirstName(e.target.value)}} value={firstName} />
                                                         </li>
                                                         <li>
@@ -289,6 +293,9 @@ function Register() {
                                                         <li>
                                                             <br />
                                                             <input type='text' placeholder="Driver's License Number" className='input_login' onChange={(e) => {setdlicense(e.target.value)}} value={dlicense} />
+                                                        </li>
+                                                        <li>
+                                                            <input type='text' placeholder='Company ID' className='input_login' onChange={(e) => {setcompanyID(e.target.value)}} value={companyID} />
                                                         </li>
                                                         <li>
                                                             <input type='text' placeholder='Age' className='input_login' onChange={(e) => {setage(e.target.value)}} value={age} />

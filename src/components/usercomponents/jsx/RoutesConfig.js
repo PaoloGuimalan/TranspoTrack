@@ -38,7 +38,7 @@ function RoutesConfig() {
     }
     else{
       if(userDataDetails.userType == "Commuter"){
-        Axios.post(`https://${URL_TWO}/commuterUpdateDestination`, {
+        Axios.post(`${URL_TWO}/commuterUpdateDestination`, {
           userID: userDataDetails.userID,
           userType: userDataDetails.userType,
           destination: destinationinputvalue
@@ -62,7 +62,7 @@ function RoutesConfig() {
 
             //Axios -> Dispatch -> Display
 
-            Axios.get(`https://${URL_TWO}/userTravel/${userDataDetails.userType}`, {
+            Axios.get(`${URL_TWO}/userTravel/${userDataDetails.userType}`, {
                 headers:{
                   "x-access-tokencommuter": localStorage.getItem('tokencommuter')
                 }
@@ -92,7 +92,7 @@ function RoutesConfig() {
         })
       }
       else if(userDataDetails.userType == "Driver"){
-        Axios.post(`https://${URL_TWO}/commuterUpdateDestination`, {
+        Axios.post(`${URL_TWO}/commuterUpdateDestination`, {
           userID: userDataDetails.userID,
           userType: userDataDetails.userType,
           destination: destinationinputvalue
@@ -116,7 +116,7 @@ function RoutesConfig() {
 
             //Axios -> Dispatch -> Display
 
-            Axios.get(`https://${URL_TWO}/userTravel/${userDataDetails.userType}`, {
+            Axios.get(`${URL_TWO}/userTravel/${userDataDetails.userType}`, {
                 headers:{
                   "x-access-tokendriver": localStorage.getItem('tokendriver')
                 }
@@ -162,7 +162,7 @@ function RoutesConfig() {
       }, 4000)
     }
     else{
-      Axios.post(`https://${URL_TWO}/driverUpdateRoute`, {
+      Axios.post(`${URL_TWO}/driverUpdateRoute`, {
         userID: userDataDetails.userID,
         destination_one: destinationOne,
         destination_two: destinationTwo
@@ -188,7 +188,7 @@ function RoutesConfig() {
 
           //Axios Route re-Dispatch
 
-          Axios.get(`https://${URL_TWO}/userTravel/${userDataDetails.userType}`, {
+          Axios.get(`${URL_TWO}/userTravel/${userDataDetails.userType}`, {
             headers:{
               "x-access-tokendriver": localStorage.getItem('tokendriver')
             }

@@ -119,7 +119,7 @@ function Map(){
           <GoogleMap 
             defaultZoom={17} 
             defaultCenter={initialPosition}
-            center={coords}
+            // center={coords}
             options={{
               gestureHandling:'greedy',
               zoomControlOptions: { position: 3 },
@@ -275,9 +275,8 @@ function Home() {
     }
   }, [driver, commuter])
 
-  useEffect(() => {
-    if((commuter != "" || commuter != null) && (driver == "" || driver == null)){
-        Axios.get(`https://${URL_TWO}/userData`, {
+  const userDataFetch = () => {
+      Axios.get(`${URL_TWO}/userData`, {
           headers:{
             "x-access-tokencommuter": localStorage.getItem('tokencommuter')
           }
@@ -287,10 +286,11 @@ function Home() {
           dispatch({type: USER_DETAILS, userdatadetails: response.data})
         }).catch((err) => {
           console.log(err);
-        })
-    }
-    else if((commuter == "" || commuter == null) && (driver != "" || driver != null)){
-      Axios.get(`https://${URL_TWO}/userData`, {
+      })
+  }
+
+  const userDataDriverFetch = () => {
+    Axios.get(`${URL_TWO}/userData`, {
         headers:{
           "x-access-tokendriver": localStorage.getItem('tokendriver')
         }
@@ -300,13 +300,24 @@ function Home() {
         dispatch({type: USER_DETAILS, userdatadetails: response.data})
       }).catch((err) => {
         console.log(err);
+        logoutfunc()
       })
+  }
+
+  useEffect(() => {
+    if((commuter != "" || commuter != null) && (driver == "" || driver == null)){
+        userDataFetch()
+    }
+    else if((commuter == "" || commuter == null) && (driver != "" || driver != null)){
+        setTimeout(() => {
+          userDataDriverFetch()
+        }, 2000)
     }
   }, [driver, commuter])
 
   useEffect(() => {
     if((commuter != "" || commuter != null) && (driver == "" || driver == null)){
-      Axios.get(`https://${URL_TWO}/userTravel/${"Commuter"}`, {
+      Axios.get(`${URL_TWO}/userTravel/${"Commuter"}`, {
         headers:{
           "x-access-tokencommuter": localStorage.getItem('tokencommuter')
         }
@@ -321,7 +332,7 @@ function Home() {
       })
     }
     else if((commuter == "" || commuter == null) && (driver != "" || driver != null)){
-      Axios.get(`https://${URL_TWO}/userTravel/${"Driver"}`, {
+      Axios.get(`${URL_TWO}/userTravel/${"Driver"}`, {
         headers:{
           "x-access-tokendriver": localStorage.getItem('tokendriver')
         }

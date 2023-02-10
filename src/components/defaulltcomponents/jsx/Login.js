@@ -13,7 +13,7 @@ function Login() {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
 
-  const [accountType, setaccountType] = useState("none");
+  const [accountType, setaccountType] = useState("Driver");
 
   const [loadingState, setloadingState] = useState(false);
 
@@ -38,7 +38,7 @@ function Login() {
     // navigate("/home");
     setloadingState(true);
     if(accountType != "none"){
-        Axios.post(`https://${URL_TWO}/getLogin`, {
+        Axios.post(`${URL_TWO}/getLogin`, {
             email: email,
             password: password,
             accountType: accountType
@@ -206,13 +206,13 @@ function Login() {
                                 <li>
                                     <input type='password' placeholder='Password' className='input_login' value={password} onChange={(e) => {setpassword(e.target.value)}} />
                                 </li>
-                                <li>
+                                {/* <li>
                                     <select className='input_login' onChange={(e) => {setaccountType(e.target.value)}}>
                                         <option value='none'>--Select Account Type--</option>
                                         <option value='Commuter'>Commuter</option>
                                         <option value='Driver'>Driver</option>
                                     </select>
-                                </li>
+                                </li> */}
                                 <li>
                                     <button id='btn_login' onClick={() => {loginTrigger()}}>Login</button>
                                 </li>
