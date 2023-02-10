@@ -357,17 +357,32 @@ function Home() {
         // setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
         // setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
         // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
-        socketIdentifier({
-          userID: userDataDetails.userID,
-          userType: userDataDetails.userType,
-          destination: alltraveldata.destination,
-          route: `${alltraveldata.destination_one} - ${alltraveldata.destination_two}`,
-          vehicle: alltraveldata.vehicle,
-          coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
-        }, userDataDetails.userType)
+        // socketIdentifier({
+        //   userID: userDataDetails.userID,
+        //   userType: userDataDetails.userType,
+        //   destination: alltraveldata.destination,
+        //   route: `${alltraveldata.destination_one} - ${alltraveldata.destination_two}`,
+        //   vehicle: alltraveldata.vehicle,
+        //   coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
+        // }, userDataDetails.userType)
+        Axios.get(`${URL_TWO}/activeDriversRoute/${position.coords.latitude}/${position.coords.longitude}`, {
+          headers:{
+            "x-access-tokendriver": localStorage.getItem('tokendriver')
+          }
+        }).then((response) => {
+          //do nothing
+          if(response.data.status){
+            // console.log(response.data.message)
+          }
+          else{
+            console.log(response.data.message)
+          }
+        }).catch((err) => {
+          console.log(err)
+        })
       })
       // console.log(alltraveldata);
-    }, 1500);
+    }, 5000);
     // console.log(alltraveldata);
   }, [userDataDetails, alltraveldata]);
 
