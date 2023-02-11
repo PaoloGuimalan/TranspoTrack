@@ -57,6 +57,13 @@
     font-size: 25px;
     font-weight: bold;
     font-family: 'Roboto', sans-serif;
+    margin-bottom: 0px;
+}
+
+#label_poweredby{
+    margin-top: 0px;
+    font-size: 13px;
+    margin-bottom: 20px;
 }
 
 .input_login{

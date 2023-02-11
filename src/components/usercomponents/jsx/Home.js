@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
 import RoutesConfig from './RoutesConfig';
 import Account from './Account';
+import { userdatadetailsstate } from '../../../redux/action/action';
 
 function Map(){
 
@@ -297,10 +298,10 @@ function Home() {
       }).then((response) => {
         // console.log(response.data);
         // setuserDataDetails(response.data);
-        dispatch({type: USER_DETAILS, userdatadetails: response.data})
+        dispatch({type: USER_DETAILS, userdatadetails: response.data.result})
       }).catch((err) => {
         console.log(err);
-        logoutfunc()
+        // logoutfunc()
       })
   }
 
@@ -316,6 +317,7 @@ function Home() {
   }, [driver, commuter])
 
   useEffect(() => {
+    userDataDriverFetch()
     if((commuter != "" || commuter != null) && (driver == "" || driver == null)){
       Axios.get(`${URL_TWO}/userTravel/${"Commuter"}`, {
         headers:{
@@ -344,53 +346,118 @@ function Home() {
       }).catch((err) => {
         //alert error
         console.log(err);
+        // logoutfunc()
       })
     }
     // console.log(alltraveldata)
-  }, [driver, commuter, userDataDetails])
+  }, [driver, commuter])
 
   useEffect(() => {
-    setInterval(() => {
-      navigator.geolocation.getCurrentPosition((position) => {
-        dispatch({type: SET_INTITIAL_POSITION, initialposition:{ lat: position.coords.latitude, lng: position.coords.longitude } })
-        dispatch({type: SET_COORDS, coords:{ lat: position.coords.latitude, lng: position.coords.longitude }})
-        // setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
-        // setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
-        // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
-        // socketIdentifier({
-        //   userID: userDataDetails.userID,
-        //   userType: userDataDetails.userType,
-        //   destination: alltraveldata.destination,
-        //   route: `${alltraveldata.destination_one} - ${alltraveldata.destination_two}`,
-        //   vehicle: alltraveldata.vehicle,
-        //   coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
-        // }, userDataDetails.userType)
-        Axios.get(`${URL_TWO}/activeDriversRoute/${position.coords.latitude}/${position.coords.longitude}`, {
-          headers:{
-            "x-access-tokendriver": localStorage.getItem('tokendriver')
-          }
-        }).then((response) => {
-          //do nothing
-          if(response.data.status){
-            // console.log(response.data.message)
-          }
-          else{
-            console.log(response.data.message)
-          }
-        }).catch((err) => {
-          console.log(err)
-        })
-      })
-      // console.log(alltraveldata);
-    }, 5000);
-    // console.log(alltraveldata);
-  }, [userDataDetails, alltraveldata]);
+    let timeoutSetter;
+    if(userDataDetails.userID != ''){
+      setInterval(() => {
+        if(userDataDetails.userID != ''){
+          navigator.geolocation.getCurrentPosition((position) => {
+            dispatch({type: SET_INTITIAL_POSITION, initialposition:{ lat: position.coords.latitude, lng: position.coords.longitude } })
+            dispatch({type: SET_COORDS, coords:{ lat: position.coords.latitude, lng: position.coords.longitude }})
+            // setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
+            // setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
+            // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
+            // socketIdentifier({
+            //   userID: userDataDetails.userID,
+            //   userType: userDataDetails.userType,
+            //   destination: alltraveldata.destination,
+            //   route: `${alltraveldata.destination_one} - ${alltraveldata.destination_two}`,
+            //   vehicle: alltraveldata.vehicle,
+            //   coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
+            // }, userDataDetails.userType)
+            Axios.get(`${URL_TWO}/activeDriversRoute/${position.coords.latitude}/${position.coords.longitude}`, {
+              headers:{
+                "x-access-tokendriver": localStorage.getItem('tokendriver')
+              }
+            }).then((response) => {
+              //do nothing
+              if(response.data.status){
+                // console.log(response.data.message)
+              }
+              else{
+                console.log(response.data.message)
+              }
+            }).catch((err) => {
+              console.log(err)
+            })
+          })
+        }
+        // console.log(alltraveldata);
+      }, 2000);
+    }
+    else{
+      clearInterval(timeoutSetter)
+    }
+
+    return () => {
+      clearInterval(timeoutSetter)
+    }
+    // console.log("Changed");
+  }, [userDataDetails]);
 
   const logoutfunc = () => {
-    logoutSocket(userDataDetails.userID);
-    localStorage.removeItem('tokencommuter');
-    localStorage.removeItem('tokendriver');
-    navigate("/login");
+    Axios.get(`${URL_TWO}/clearLiveDataDriver`, {
+      headers:{
+        "x-access-tokendriver": localStorage.getItem('tokendriver')
+      }
+    }).then((response) => {
+      if(response.data.status){
+        dispatch({type: USER_DETAILS, userdatadetails: userdatadetailsstate})
+        // logoutSocket(userDataDetails.userID);
+        localStorage.removeItem('tokencommuter');
+        localStorage.removeItem('tokendriver');
+        navigate("/login");
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  let cancelAxios;
+
+  useEffect(() => {
+    subscribeLiveDataListener()
+  },[])
+
+  const subscribeLiveDataListener = () => {
+    if(typeof cancelAxios != typeof undefined){
+      cancelAxios.cancel()
+    }
+    else{
+      cancelAxios = Axios.CancelToken.source()
+      Axios.get(`${URL_TWO}/subscribeDataDriver`,{
+        headers:{
+          "x-access-tokendriver": localStorage.getItem('tokendriver')
+        },
+        cancelToken: cancelAxios.token
+      }).then((response) => {
+        //nothing to do
+        if(response.data.status){
+          //run init commands
+          cancelAxios = undefined
+          subscribeLiveDataListener()
+        }
+        else{
+          //also run init commands
+          // cancelAxios()
+          // subscribeMessages()
+          subscribeLiveDataListener()
+        }
+      }).catch((err) => {
+        console.log(err);
+        if(err.message != 'canceled'){
+          //run init commands
+          cancelAxios = undefined
+          subscribeLiveDataListener()
+        }
+      })
+    }
   }
 
   return (

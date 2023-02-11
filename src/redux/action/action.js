@@ -1,6 +1,6 @@
 import { SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from "../types/types";
 
-const userdatadetailsstate = {
+export const userdatadetailsstate = {
     userID: '',
     userType: '',
     firstName: '',

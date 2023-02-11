@@ -187,6 +187,7 @@ function Login() {
                 <nav>
                     <li>
                         <p id='label_login'>TranspoTrack</p>
+                        <p id='label_poweredby'>Powered by BusTrack</p>
                     </li>
                     <li>
                         {authenticationMark? (
