@@ -298,7 +298,20 @@ function Home() {
       }).then((response) => {
         // console.log(response.data);
         // setuserDataDetails(response.data);
-        dispatch({type: USER_DETAILS, userdatadetails: response.data.result})
+        if(response.data.status){
+          // console.log(response.data)
+          dispatch({type: USER_DETAILS, userdatadetails: response.data.result})
+        }
+        else{
+          if(response.data.reestablish){
+            // logoutfunc()
+            dispatch({type: USER_DETAILS, userdatadetails: userdatadetailsstate})
+            // logoutSocket(userDataDetails.userID);
+            localStorage.removeItem('tokencommuter');
+            localStorage.removeItem('tokendriver');
+            navigate("/login");
+          }
+        }
       }).catch((err) => {
         console.log(err);
         // logoutfunc()
