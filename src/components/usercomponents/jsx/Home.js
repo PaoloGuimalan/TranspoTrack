@@ -366,7 +366,7 @@ function Home() {
   }, [driver, commuter])
 
   useEffect(() => {
-    let timeoutSetter;
+    var timeoutSetter;
     if(userDataDetails.userID != ''){
       setInterval(() => {
         if(userDataDetails.userID != ''){
@@ -421,6 +421,7 @@ function Home() {
       }
     }).then((response) => {
       if(response.data.status){
+        locationSharing(false)
         dispatch({type: USER_DETAILS, userdatadetails: userdatadetailsstate})
         // logoutSocket(userDataDetails.userID);
         localStorage.removeItem('tokencommuter');
@@ -473,6 +474,25 @@ function Home() {
     }
   }
 
+  const locationSharing = (statustoggle) => {
+    Axios.get(`${URL_TWO}/locationSharingToggle/${statustoggle}`, {
+      headers:{
+        "x-access-tokendriver": localStorage.getItem('tokendriver')
+      }
+    }).then((response) => {
+      if(response.data.status){
+        console.log(response.data.message)
+        // alert("OK")
+        dispatch({type: SET_INFO_TOGGLE, infotoggle: statustoggle})
+      }
+      else{
+        console.log(response.data.message)
+      }
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
   return (
     <div id='div_home'>
       <motion.div id='navigation_home'
@@ -512,7 +532,7 @@ function Home() {
               <h4 id='navigations_h4_2'>Controls</h4>
             </li>
             <li>
-              <p className='link_ptags' onClick={() => {dispatch({type: SET_INFO_TOGGLE, infotoggle: !infotoggle})}}><span>{infotoggle? <InfoToggleOn style={{color: "lime", fontSize: "18px"}} /> : <InfoToggle style={{color: "red", fontSize: "18px"}} />}</span><span>Show Details</span></p>
+              <p className='link_ptags' onClick={() => { locationSharing(!infotoggle) }}><span>{infotoggle? <InfoToggleOn style={{color: "lime", fontSize: "18px"}} /> : <InfoToggle style={{color: "red", fontSize: "18px"}} />}</span><span>Enable Location Sharing</span></p>
             </li>
             <li>
               <p className='link_ptags' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}}><span><CenterOn style={{color: centeren? "lime" : "red", fontSize: "18px"}} /></span><span>Auto Focus</span></p>
@@ -550,7 +570,7 @@ function Home() {
                 scale: 1.2
               }}
               title='Toggle User Details'
-              className='btn_navigations_toggle' onClick={() => {dispatch({type: SET_INFO_TOGGLE, infotoggle: !infotoggle})}}>{infotoggle? <InfoToggleOn style={{color: "lime"}} /> : <InfoToggle style={{color: "red"}} />}</motion.button>
+              className='btn_navigations_toggle' onClick={() => {locationSharing(!infotoggle)}}>{infotoggle? <InfoToggleOn style={{color: "lime"}} /> : <InfoToggle style={{color: "red"}} />}</motion.button>
             </li>
             <li className='li_nav_navigations'>
               <motion.button 
