@@ -1,5 +1,5 @@
 import { createStore, combineReducers } from 'redux';
-import { setcenteren, setcommutertraveldata, setcoords, setdrivertraveldata, setinfotoggle, setinitialPosition, setuserdetails } from '../action/action';
+import { setbusstopslist, setcenteren, setcommutertraveldata, setcoords, setdrivertraveldata, setinfotoggle, setinitialPosition, setpostslist, setuserdetails } from '../action/action';
 
 const combiner = combineReducers({
     userdatadetails: setuserdetails,
@@ -8,7 +8,9 @@ const combiner = combineReducers({
     infotoggle: setinfotoggle,
     commutertraveldata: setcommutertraveldata,
     drivertraveldata: setdrivertraveldata,
-    centeren: setcenteren
+    centeren: setcenteren,
+    postslist: setpostslist,
+    busstopslist: setbusstopslist
 });
 
 const store = createStore(combiner);

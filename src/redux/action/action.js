@@ -1,4 +1,4 @@
-import { SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from "../types/types";
+import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, SET_POSTS_LIST, USER_DETAILS } from "../types/types";
 
 export const userdatadetailsstate = {
     userID: '',
@@ -83,6 +83,24 @@ export const setcenteren = (state = false, action) => {
     switch(action.type){
         case SET_CENTER_EN:
             return action.centeren;
+        default:
+            return state;
+    }
+}
+
+export const setpostslist = (state = [], action) => {
+    switch(action.type){
+        case SET_POSTS_LIST:
+            return action.postslist;
+        default:
+            return state;
+    }
+}
+
+export const setbusstopslist = (state = [], action) => {
+    switch(action.type){
+        case SET_BUS_STOPS_LIST:
+            return action.busstopslist;
         default:
             return state;
     }

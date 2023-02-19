@@ -18,10 +18,13 @@ import DriverIcon from '../imgs/drivericon.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
+import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
 import RoutesConfig from './RoutesConfig';
 import Account from './Account';
 import { userdatadetailsstate } from '../../../redux/action/action';
+import Feed from './Feed';
+import MapIcon from '@material-ui/icons/Map'
+import OpennedIcon from '../imgs/OpenStopIcon.png'
 
 function Map(){
 
@@ -47,6 +50,7 @@ function Map(){
   const coords = useSelector(state => state.coords);
   const infotoggle = useSelector(state => state.infotoggle);
   const userDataDetails = useSelector(state => state.userdatadetails);
+  const busstopslist = useSelector(state => state.busstopslist)
 
   const [livelist, setlivelist] = useState([]);
 
@@ -187,6 +191,24 @@ function Map(){
                 ) : "" : ""
               )
             })}
+            {busstopslist.map((data, i) => {
+              return(
+                <Marker
+                  icon={{
+                    url: OpennedIcon,
+                    anchor: new google.maps.Point(25, 25),
+                    scaledSize: new google.maps.Size(25, 25),
+                  }}
+                  onClick={() => { 
+                    // dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) 
+                  }}
+                  key={i}
+                  position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
+                >
+                  
+                </Marker>
+              )
+            })}
           </GoogleMap>
         ) : ""}
       </>
@@ -268,6 +290,7 @@ function Home() {
 
   const commutertraveldata = useSelector(state => state.commutertraveldata);
   const alltraveldata = useSelector(state => state.drivertraveldata);
+  const busstopslist = useSelector(state => state.busstopslist)
 
   useEffect(() => {
     if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
@@ -275,6 +298,11 @@ function Home() {
         return;
     }
   }, [driver, commuter])
+
+  useEffect(() => {
+    initBusStopsList()
+  }, [])
+  
 
   const userDataFetch = () => {
       Axios.get(`${URL_TWO}/userData`, {
@@ -474,6 +502,21 @@ function Home() {
     }
   }
 
+  const initBusStopsList = () => {
+    Axios.get(`${URL_TWO}/enabledBusStops`, {
+      headers:{
+        "x-access-tokendriver": localStorage.getItem("tokendriver")
+      }
+    }).then((response) => {
+      if(response.data.status){
+        console.log(response.data.result)
+        dispatch({type: SET_BUS_STOPS_LIST, busstopslist: response.data.result})
+      }
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
   const locationSharing = (statustoggle) => {
     Axios.get(`${URL_TWO}/locationSharingToggle/${statustoggle}`, {
       headers:{
@@ -523,6 +566,9 @@ function Home() {
               <Link to='/home' className='links_tag_navigation'><p className='link_ptags'><span><HomeToggle style={{fontSize: "18px"}} /></span><span>Home</span></p></Link>
             </li>
             <li>
+              <Link to='/home/map' className='links_tag_navigation'><p className='link_ptags'><span><MapIcon style={{fontSize: "18px"}} /></span><span>Map</span></p></Link>
+            </li>
+            <li>
               <Link to='/home/avroutes' className='links_tag_navigation'><p className='link_ptags'><span><AvRoutesToggle style={{fontSize: "18px"}} /></span><span>Routes / Destinations</span></p></Link>
             </li>
             <li>
@@ -555,6 +601,13 @@ function Home() {
               whileHover={{
                 scale: 1.2
               }}
+              className='btn_navigations_toggle' onClick={() => navigate("/home/map")}><MapIcon /></motion.button>
+            </li>
+            <li className='li_nav_navigations'>
+              <motion.button 
+              whileHover={{
+                scale: 1.2
+              }}
               className='btn_navigations_toggle' onClick={() => navigate("/home/avroutes")}><AvRoutesToggle /></motion.button>
             </li>
             <li className='li_nav_navigations'>
@@ -572,13 +625,13 @@ function Home() {
               title='Toggle User Details'
               className='btn_navigations_toggle' onClick={() => {locationSharing(!infotoggle)}}>{infotoggle? <InfoToggleOn style={{color: "lime"}} /> : <InfoToggle style={{color: "red"}} />}</motion.button>
             </li>
-            <li className='li_nav_navigations'>
+            {/* <li className='li_nav_navigations'>
               <motion.button 
               whileHover={{
                 scale: 1.2
               }}
               className='btn_navigations_toggle' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}} ><CenterOn style={{color: centeren? "lime" : "red"}} /></motion.button>
-            </li>
+            </li> */}
             <li className='li_nav_navigations'>
               <motion.button
               whileHover={{
@@ -591,7 +644,8 @@ function Home() {
         )}
       </motion.div>
       <Routes>
-        <Route path='/' element={<MapRoute />} />
+        <Route path='/' element={<Feed />} />
+        <Route path='/map' element={<MapRoute />} />
         <Route path='/avroutes' element={<RoutesConfig />} />
         <Route path='/account' element={<Account />} />
       </Routes>
