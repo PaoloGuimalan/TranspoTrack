@@ -12,6 +12,7 @@ import AvRoutesToggle from '@material-ui/icons/Directions'
 import InfoToggleOn from '@material-ui/icons/Label'
 import InfoToggle from '@material-ui/icons/LabelOutlined'
 import CenterOn from '@material-ui/icons/CenterFocusStrong'
+import InfoMapIcon from '@material-ui/icons/AccountTree'
 import { Link, useNavigate, Routes, Route } from 'react-router-dom';
 import CommuterIcon from '../imgs/commutericon.png';
 import DriverIcon from '../imgs/drivericon.png';
@@ -25,6 +26,7 @@ import { userdatadetailsstate } from '../../../redux/action/action';
 import Feed from './Feed';
 import MapIcon from '@material-ui/icons/Map'
 import OpennedIcon from '../imgs/OpenStopIcon.png'
+import InfoMap from './InfoMap';
 
 function Map(){
 
@@ -327,7 +329,7 @@ function Home() {
         // console.log(response.data);
         // setuserDataDetails(response.data);
         if(response.data.status){
-          // console.log(response.data)
+          // console.log(response.data.result)
           dispatch({type: USER_DETAILS, userdatadetails: response.data.result})
         }
         else{
@@ -569,7 +571,7 @@ function Home() {
               <Link to='/home/map' className='links_tag_navigation'><p className='link_ptags'><span><MapIcon style={{fontSize: "18px"}} /></span><span>Map</span></p></Link>
             </li>
             <li>
-              <Link to='/home/avroutes' className='links_tag_navigation'><p className='link_ptags'><span><AvRoutesToggle style={{fontSize: "18px"}} /></span><span>Routes / Destinations</span></p></Link>
+              <Link to='/home/avroutes' className='links_tag_navigation'><p className='link_ptags'><span><InfoMapIcon style={{fontSize: "18px"}} /></span><span>Info Map</span></p></Link>
             </li>
             <li>
               <Link to='/home/account' className='links_tag_navigation'><p className='link_ptags'><span><AccountToggle style={{fontSize: "18px"}} /></span><span>Account</span></p></Link>
@@ -589,7 +591,7 @@ function Home() {
           </nav>
         ) : (
           <nav id='nav_navigation'>
-            <li className='li_nav_navigations'>
+            {/* <li className='li_nav_navigations'>
               <motion.button 
               whileHover={{
                 scale: 1.2
@@ -608,7 +610,7 @@ function Home() {
               whileHover={{
                 scale: 1.2
               }}
-              className='btn_navigations_toggle' onClick={() => navigate("/home/avroutes")}><AvRoutesToggle /></motion.button>
+              className='btn_navigations_toggle' onClick={() => navigate("/home/avroutes")}><InfoMapIcon /></motion.button>
             </li>
             <li className='li_nav_navigations'>
               <motion.button 
@@ -624,7 +626,7 @@ function Home() {
               }}
               title='Toggle User Details'
               className='btn_navigations_toggle' onClick={() => {locationSharing(!infotoggle)}}>{infotoggle? <InfoToggleOn style={{color: "lime"}} /> : <InfoToggle style={{color: "red"}} />}</motion.button>
-            </li>
+            </li> */}
             {/* <li className='li_nav_navigations'>
               <motion.button 
               whileHover={{
@@ -632,21 +634,21 @@ function Home() {
               }}
               className='btn_navigations_toggle' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}} ><CenterOn style={{color: centeren? "lime" : "red"}} /></motion.button>
             </li> */}
-            <li className='li_nav_navigations'>
+            {/* <li className='li_nav_navigations'>
               <motion.button
               whileHover={{
                 scale: 1.2
               }} 
               onClick={logoutfunc}
               className='btn_navigations_toggle'><LogoutToggle /></motion.button>
-            </li>
+            </li> */}
           </nav>
         )}
       </motion.div>
       <Routes>
         <Route path='/' element={<Feed />} />
         <Route path='/map' element={<MapRoute />} />
-        <Route path='/avroutes' element={<RoutesConfig />} />
+        <Route path='/avroutes' element={<InfoMap />} />
         <Route path='/account' element={<Account />} />
       </Routes>
     </div>
