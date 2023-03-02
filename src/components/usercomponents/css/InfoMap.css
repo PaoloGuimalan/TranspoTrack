@@ -72,7 +72,7 @@
 }
 
 .div_stationInside_container{
-    background-color: orange;
+    /* background-color: orange; */
     width: calc(90% - 20px);
     max-width: 270px;
     height: 100px;

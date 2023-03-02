@@ -396,53 +396,70 @@ function Home() {
   }, [driver, commuter])
 
   useEffect(() => {
-    var timeoutSetter;
-    if(userDataDetails.userID != ''){
-      setInterval(() => {
-        if(userDataDetails.userID != ''){
-          navigator.geolocation.getCurrentPosition((position) => {
-            dispatch({type: SET_INTITIAL_POSITION, initialposition:{ lat: position.coords.latitude, lng: position.coords.longitude } })
-            dispatch({type: SET_COORDS, coords:{ lat: position.coords.latitude, lng: position.coords.longitude }})
-            // setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
-            // setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
-            // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
-            // socketIdentifier({
-            //   userID: userDataDetails.userID,
-            //   userType: userDataDetails.userType,
-            //   destination: alltraveldata.destination,
-            //   route: `${alltraveldata.destination_one} - ${alltraveldata.destination_two}`,
-            //   vehicle: alltraveldata.vehicle,
-            //   coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
-            // }, userDataDetails.userType)
-            Axios.get(`${URL_TWO}/activeDriversRoute/${position.coords.latitude}/${position.coords.longitude}`, {
-              headers:{
-                "x-access-tokendriver": localStorage.getItem('tokendriver')
-              }
-            }).then((response) => {
-              //do nothing
-              if(response.data.status){
-                // console.log(response.data.message)
-              }
-              else{
-                console.log(response.data.message)
-              }
-            }).catch((err) => {
-              console.log(err)
-            })
-          })
-        }
-        // console.log(alltraveldata);
-      }, 2000);
-    }
-    else{
-      clearInterval(timeoutSetter)
-    }
+    // var timeoutSetter;
+    // if(userDataDetails.userID != ''){
+    //   setInterval(() => {
+        
+    //     // console.log(alltraveldata);
+    //   }, 2000);
+    // }
+    // else{
+    //   clearInterval(timeoutSetter)
+    // }
 
-    return () => {
-      clearInterval(timeoutSetter)
-    }
+    // return () => {
+    //   clearInterval(timeoutSetter)
+    // }
     // console.log("Changed");
+
+    shareLocationTrigger()
+
   }, [userDataDetails]);
+
+  const shareLocationTrigger = () => {
+    //userDataDetails.userID != ''
+    if(true){
+      navigator.geolocation.getCurrentPosition((position) => {
+        dispatch({type: SET_INTITIAL_POSITION, initialposition:{ lat: position.coords.latitude, lng: position.coords.longitude } })
+        dispatch({type: SET_COORDS, coords:{ lat: position.coords.latitude, lng: position.coords.longitude }})
+        // setinitialPosition({ lat: position.coords.latitude, lng: position.coords.longitude })
+        // setcoords({ lat: position.coords.latitude, lng: position.coords.longitude })
+        // console.log({ lat: position.coords.latitude, lng: position.coords.longitude });
+        // socketIdentifier({
+        //   userID: userDataDetails.userID,
+        //   userType: userDataDetails.userType,
+        //   destination: alltraveldata.destination,
+        //   route: `${alltraveldata.destination_one} - ${alltraveldata.destination_two}`,
+        //   vehicle: alltraveldata.vehicle,
+        //   coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
+        // }, userDataDetails.userType)
+        Axios.get(`${URL_TWO}/activeDriversRoute/${position.coords.latitude}/${position.coords.longitude}`, {
+          headers:{
+            "x-access-tokendriver": localStorage.getItem('tokendriver')
+          }
+        }).then((response) => {
+          //do nothing
+          if(response.data.status){
+            // console.log(response.data.message)
+            setTimeout(() => {
+              shareLocationTrigger()
+            },1500)
+          }
+          else{
+            console.log(response.data.message)
+            setTimeout(() => {
+              shareLocationTrigger()
+            },1500)
+          }
+        }).catch((err) => {
+          console.log(err)
+          setTimeout(() => {
+              shareLocationTrigger()
+            },1500)
+        })
+      })
+    }
+  }
 
   const logoutfunc = () => {
     Axios.get(`${URL_TWO}/clearLiveDataDriver`, {
