@@ -29,6 +29,7 @@
     padding: 10px;
     padding-top: 5px;
     padding-bottom: 20px;
+    border-bottom: solid 1px #808080;
 }
 
 #p_route_info_label{
@@ -42,6 +43,8 @@
     flex-direction: column;
     align-items: center;
     padding-bottom: 30px;
+    flex: 1;
+    overflow-y: auto;
 }
 
 .div_stationIndv{
@@ -88,7 +91,7 @@
     text-align: left;
     font-size: 15px;
     font-weight: bold;
-    color: #404040;
+    /* color: #404040; */
 }
 
 #p_waitingNumber{
@@ -119,4 +122,35 @@
     align-items: center;
     width: 100%;
     /* height: 50%; */
+}
+
+#div_headway_container{
+    background-color: transparent;
+    width: 100%;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    border-top: solid 1px #808080;
+}
+
+#div_headway_label{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+#p_headway_label{
+    margin: 0px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#div_headway_content{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }

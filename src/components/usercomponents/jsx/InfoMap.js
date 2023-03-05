@@ -123,7 +123,11 @@ function InfoMap() {
                         <div className='div_stationInfo_container'>
                             <motion.div
                             initial={{
-                                backgroundColor: "orange"
+                                backgroundColor: "#404040",
+                                color: "white"
+                            }}
+                            animate={{
+                                backgroundColor: targetBusStop == `${st.stationID}_${i}`? "orange" : "#404040"
                             }}
                             className='div_stationInside_container' onClick={() => { settargetBusStop(`${st.stationID}_${i}`) }}>
                                 <p id='p_stationName'>{st.stationName}</p>
@@ -135,6 +139,15 @@ function InfoMap() {
                     </div>
                 )
             })}
+        </div>
+        <div id='div_headway_container'>
+            <div id="div_headway_label">
+                <p id='p_headway_label'>Headway</p>
+            </div>
+            <div id='div_headway_content'>
+                <p id='p_route_info_label'><b>Front Distance:</b> Bus ID | Distance</p>
+                <p id='p_route_info_label'><b>Rear Distance:</b> Bus ID | Distance</p>
+            </div>
         </div>
     </div>
   )
