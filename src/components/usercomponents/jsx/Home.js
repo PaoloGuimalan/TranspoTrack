@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../css/Home.css';
 import Axios from 'axios';
-import { GoogleMap, withScriptjs, withGoogleMap, Marker, Circle, InfoWindow } from 'react-google-maps'
+import { GoogleMap, withScriptjs, withGoogleMap, Marker, Circle, InfoWindow, Polyline } from 'react-google-maps'
 import Toggle from '@material-ui/icons/Menu'
 import Minimize from '@material-ui/icons/ArrowLeft'
 import { motion } from 'framer-motion';
@@ -19,7 +19,7 @@ import DriverIcon from '../imgs/drivericon.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
+import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_ROUTE, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
 import RoutesConfig from './RoutesConfig';
 import Account from './Account';
 import { userdatadetailsstate } from '../../../redux/action/action';
@@ -53,6 +53,7 @@ function Map(){
   const infotoggle = useSelector(state => state.infotoggle);
   const userDataDetails = useSelector(state => state.userdatadetails);
   const busstopslist = useSelector(state => state.busstopslist)
+  const driverroute = useSelector(state => state.driverroute);
 
   const [livelist, setlivelist] = useState([]);
 
@@ -211,6 +212,18 @@ function Map(){
                 </Marker>
               )
             })}
+            {driverroute != null? (
+              <Polyline
+                draggable={false}
+                editable={false}
+                path={driverroute.routePath}
+                options={{
+                  fillColor: "transparent",
+                  strokeColor: "lime",
+                  strokeWeight: 4
+                }}
+              />
+            ) : null}
           </GoogleMap>
         ) : ""}
       </>
@@ -303,6 +316,7 @@ function Home() {
 
   useEffect(() => {
     initBusStopsList()
+    initDriverRoute()
   }, [])
   
 
@@ -475,6 +489,15 @@ function Home() {
         localStorage.removeItem('tokendriver');
         navigate("/login");
       }
+      else{
+        console.log("LOGOUT", response.data.message)
+        locationSharing(false)
+        dispatch({type: USER_DETAILS, userdatadetails: userdatadetailsstate})
+        // logoutSocket(userDataDetails.userID);
+        localStorage.removeItem('tokencommuter');
+        localStorage.removeItem('tokendriver');
+        navigate("/login");
+      }
     }).catch((err) => {
       console.log(err)
     })
@@ -508,7 +531,13 @@ function Home() {
           //also run init commands
           // cancelAxios()
           // subscribeMessages()
-          subscribeLiveDataListener()
+          if(response.data.message == "Token Denied!"){
+            logoutfunc()
+          }
+          else{
+            subscribeLiveDataListener()
+          }
+          // subscribeLiveDataListener()
         }
       }).catch((err) => {
         console.log(err);
@@ -552,6 +581,24 @@ function Home() {
       }
     }).catch((err) => {
       console.log(err);
+    })
+  }
+
+  const initDriverRoute = () => {
+    Axios.get(`${URL_TWO}/getDriverRoutes`, {
+        headers: {
+            "x-access-tokendriver": localStorage.getItem("tokendriver")
+        }
+    }).then((response) => {
+        if(response.data.status){
+            // console.log(response.data.result)
+            dispatch({ type: SET_DRIVER_ROUTE, driverroute: response.data.result })
+        }
+        else{
+            console.log(response.data.message)
+        }
+    }).catch((err) => {
+        console.log(err);
     })
   }
 
