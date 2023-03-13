@@ -426,7 +426,9 @@ function Home() {
     // }
     // console.log("Changed");
 
-    shareLocationTrigger()
+    if(userDataDetails.userID != ''){
+      shareLocationTrigger()
+    }
 
   }, [userDataDetails]);
 

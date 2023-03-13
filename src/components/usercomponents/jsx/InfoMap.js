@@ -16,11 +16,20 @@ function InfoMap() {
 
   const [targetBusStop, settargetBusStop] = useState("");
   const [distanceBarpercentage, setdistanceBarpercentage] = useState(0)
+  const [waitingList, setwaitingList] = useState([])
 
   useEffect(() => {
     initDriverRoute()
     initIteratordistanceBar()
   },[userDataDetails])
+
+  useEffect(() => {
+    initWaitingCount()
+
+    return () => {
+        initWaitingCount = () => {  }
+    }
+  },[])
 
   const initIteratordistanceBar = () => {
     setInterval(() => {
@@ -91,6 +100,30 @@ function InfoMap() {
     return finalPercentage;
   }
 
+  var initWaitingCount = () => {
+    Axios.get(`${URL_TWO}/getWaitingCount`, {
+        headers:{
+            "x-access-tokendriver": localStorage.getItem("tokendriver")
+        }
+    }).then((response) => {
+        if(response.data.status){
+            // console.log(response.data.result)
+            setwaitingList(response.data.result)
+        }
+        else{
+            console.log(response.data.message)
+        }
+        setTimeout(() => {
+            initWaitingCount()
+        },30000)
+    }).catch((err) => {
+        console.log(err)
+        setTimeout(() => {
+            initWaitingCount()
+        },30000)
+    })
+  }
+
   return (
     <div id='div_infomap'>
         <div id='div_header_infomap'>
@@ -133,7 +166,9 @@ function InfoMap() {
                                 <p id='p_stationName'>{st.stationName}</p>
                                 <p id='p_stationName'>{st.stationID}</p>
                                 <div className='flexed_div'/>
-                                <p id='p_waitingNumber'><b>Waiting Commuters:</b> 0</p>
+                                <p id='p_waitingNumber'><b>Waiting Commuters:</b> {
+                                    JSON.stringify(waitingList.filter((cnt, i) => cnt._id == st.stationID)[0]?.count? waitingList.filter((cnt, i) => cnt._id == st.stationID)[0]?.count : 0)
+                                }</p>
                             </motion.div>
                         </div>
                     </div>
