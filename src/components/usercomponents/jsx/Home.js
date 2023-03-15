@@ -430,9 +430,13 @@ function Home() {
       shareLocationTrigger()
     }
 
-  }, [userDataDetails]);
+    return () => {
+      shareLocationTrigger = () => {  }
+    }
 
-  const shareLocationTrigger = () => {
+  }, [userDataDetails, infotoggle]);
+
+  var shareLocationTrigger = () => {
     //userDataDetails.userID != ''
     if(true){
       navigator.geolocation.getCurrentPosition((position) => {
@@ -449,7 +453,7 @@ function Home() {
         //   vehicle: alltraveldata.vehicle,
         //   coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
         // }, userDataDetails.userType)
-        Axios.get(`${URL_TWO}/activeDriversRoute/${position.coords.latitude}/${position.coords.longitude}`, {
+        Axios.get(`${URL_TWO}/activeDriversRoute/${position.coords.latitude}/${position.coords.longitude}/${infotoggle}`, {
           headers:{
             "x-access-tokendriver": localStorage.getItem('tokendriver')
           }
@@ -648,9 +652,9 @@ function Home() {
             <li>
               <p className='link_ptags' onClick={() => { locationSharing(!infotoggle) }}><span>{infotoggle? <InfoToggleOn style={{color: "lime", fontSize: "18px"}} /> : <InfoToggle style={{color: "red", fontSize: "18px"}} />}</span><span>Enable Location Sharing</span></p>
             </li>
-            <li>
+            {/* <li>
               <p className='link_ptags' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}}><span><CenterOn style={{color: centeren? "lime" : "red", fontSize: "18px"}} /></span><span>Auto Focus</span></p>
-            </li>
+            </li> */}
             <li>
               <button id='btn_logout' onClick={logoutfunc}>Logout</button>
             </li>
