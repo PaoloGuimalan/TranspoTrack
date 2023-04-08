@@ -19,7 +19,7 @@ import DriverIcon from '../imgs/drivericon.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_ROUTE, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
+import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_DESTINATION, SET_DRIVER_ROUTE, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
 import RoutesConfig from './RoutesConfig';
 import Account from './Account';
 import { userdatadetailsstate } from '../../../redux/action/action';
@@ -133,6 +133,7 @@ function Map(){
               zoomControlOptions: { position: 3 },
               streetViewControl:false,
               fullscreenControl:true,
+              mapTypeId: 'satellite' //roadmap, satellite, terrain, hybrid
             }}
           >
             <Marker 
@@ -307,6 +308,9 @@ function Home() {
   const alltraveldata = useSelector(state => state.drivertraveldata);
   const busstopslist = useSelector(state => state.busstopslist)
 
+  const driverdestination = useSelector(state => state.driverdestination)
+  const driverroute = useSelector(state => state.driverroute);
+
   useEffect(() => {
     if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
         navigate("/login");
@@ -434,7 +438,29 @@ function Home() {
       shareLocationTrigger = () => {  }
     }
 
-  }, [userDataDetails, infotoggle]);
+  }, [userDataDetails, infotoggle, driverdestination]);
+
+  const computeDistance = (lat2, lon2) => {
+    var lat1 = driverdestination.index == driverroute.stationList.length - 1? driverroute.stationList[0].coordinates[1] : driverroute.stationList[driverdestination.index + 1].coordinates[1]
+    var lon1 = driverdestination.index == driverroute.stationList.length - 1? driverroute.stationList[0].coordinates[0] : driverroute.stationList[driverdestination.index + 1].coordinates[0]
+
+    const R = 6371e3;
+    const φ1 = parseFloat(lat1) * Math.PI/180;
+    const φ2 = parseFloat(lat2) * Math.PI/180;
+    const Δφ = (parseFloat(lat2) - parseFloat(lat1)) * Math.PI/180;
+    const Δλ = (parseFloat(lon2) - parseFloat(lon1)) * Math.PI/180;
+
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    const d = R * c;
+
+    // console.log(d)
+
+    return d;
+  }
 
   var shareLocationTrigger = () => {
     //userDataDetails.userID != ''
@@ -453,7 +479,24 @@ function Home() {
         //   vehicle: alltraveldata.vehicle,
         //   coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
         // }, userDataDetails.userType)
-        Axios.get(`${URL_TWO}/activeDriversRoute/${position.coords.latitude}/${position.coords.longitude}/${infotoggle}`, {
+        var distanceListener = computeDistance(position.coords.latitude, position.coords.longitude)
+        if(distanceListener < 50){
+          if(driverdestination.index == driverroute.stationList.length - 1){
+            dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
+              stationID: driverroute.stationList[0].stationID,
+              stationName: driverroute.stationList[0].stationName,
+              index: 0
+            }})
+          }
+          else{
+            dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
+              stationID: driverroute.stationList[driverdestination.index + 1].stationID,
+              stationName: driverroute.stationList[driverdestination.index + 1].stationName,
+              index: driverdestination.index + 1
+            }})
+          }
+        }
+        Axios.get(`${URL_TWO}/activeDriversRoute/${driverdestination.stationID}/${driverdestination.stationName}/${driverdestination.index}/${position.coords.latitude}/${position.coords.longitude}/${infotoggle}`, {
           headers:{
             "x-access-tokendriver": localStorage.getItem('tokendriver')
           }
@@ -599,6 +642,11 @@ function Home() {
         if(response.data.status){
             // console.log(response.data.result)
             dispatch({ type: SET_DRIVER_ROUTE, driverroute: response.data.result })
+            dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
+              stationID: response.data.result.stationList[0].stationID,
+              stationName: response.data.result.stationList[0].stationName,
+              index: 0
+            }})
         }
         else{
             console.log(response.data.message)
