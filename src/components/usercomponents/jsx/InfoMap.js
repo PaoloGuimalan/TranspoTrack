@@ -150,17 +150,33 @@ function InfoMap() {
                     <div className='div_stationIndv' key={`${st.stationID}_${i}`}>
                         <div className='div_bar_container'>
                             {driverdestination.stationID == `${st.stationID}`? (
-                                <motion.div
-                                initial={{
-                                    height: `0%`,
-                                    backgroundColor: "orange"
-                                }}
-                                animate={{
-                                    height: `${computeDistance(st.coordinates[1], st.coordinates[0],coords.lat, coords.lng, i)}%`
-                                }}
-                                id='div_insidebar_iconholder'>
-                                    <img src={DriverIcon} id='img_drivericon' />
-                                </motion.div>
+                                driverdestination.index == i? (
+                                    <motion.div
+                                    initial={{
+                                        height: `0%`,
+                                        backgroundColor: "orange"
+                                    }}
+                                    animate={{
+                                        height: `${computeDistance(st.coordinates[1], st.coordinates[0],coords.lat, coords.lng, i)}%`
+                                    }}
+                                    id='div_insidebar_iconholder'>
+                                        <img src={DriverIcon} id='img_drivericon' />
+                                    </motion.div>
+                                ) : (
+                                    <motion.div
+                                    initial={{
+                                        height: `0%`,
+                                        backgroundColor: "orange"
+                                    }}
+                                    animate={{
+                                        height: driverdestination.index > i? "100%" : "0%"
+                                    }}
+                                    transition={{
+                                        duration: 0
+                                    }}
+                                    id='div_insidebar_iconholder'>
+                                    </motion.div>
+                                )
                             ) : (
                                 <motion.div
                                 initial={{
@@ -184,7 +200,7 @@ function InfoMap() {
                                 color: "white"
                             }}
                             animate={{
-                                backgroundColor: driverdestination.stationID == `${st.stationID}`? "orange" : "#404040"
+                                backgroundColor: driverdestination.stationID == `${st.stationID}`? driverdestination.index == i? "orange" : "#404040" : "#404040"
                             }}
                             className='div_stationInside_container' onClick={() => { 
                                 // settargetBusStop(`${st.stationID}_${i}`)

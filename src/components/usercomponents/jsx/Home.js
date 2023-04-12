@@ -19,12 +19,13 @@ import DriverIcon from '../imgs/drivericon.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_DESTINATION, SET_DRIVER_ROUTE, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, USER_DETAILS } from '../../../redux/types/types';
+import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_DESTINATION, SET_DRIVER_ROUTE, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, SET_NEON_ASSISTANT_STATUS, USER_DETAILS } from '../../../redux/types/types';
 import RoutesConfig from './RoutesConfig';
 import Account from './Account';
 import { userdatadetailsstate } from '../../../redux/action/action';
 import Feed from './Feed';
 import MapIcon from '@material-ui/icons/Map'
+import APIIcon from '@material-ui/icons/Assistant'
 import OpennedIcon from '../imgs/OpenStopIcon.png'
 import InfoMap from './InfoMap';
 
@@ -310,6 +311,8 @@ function Home() {
 
   const driverdestination = useSelector(state => state.driverdestination)
   const driverroute = useSelector(state => state.driverroute);
+
+  const neonassistantstatus = useSelector(state => state.neonassistantstatus);
 
   useEffect(() => {
     if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
@@ -700,6 +703,9 @@ function Home() {
             <li>
               <p className='link_ptags' onClick={() => { locationSharing(!infotoggle) }}><span>{infotoggle? <InfoToggleOn style={{color: "lime", fontSize: "18px"}} /> : <InfoToggle style={{color: "red", fontSize: "18px"}} />}</span><span>Enable Location Sharing</span></p>
             </li>
+            {/* <li>
+              <p className='link_ptags' onClick={() => { dispatch({type: SET_NEON_ASSISTANT_STATUS, neonassistantstatus: !neonassistantstatus}) }}><span>{neonassistantstatus? <APIIcon style={{color: "lime", fontSize: "18px"}} /> : <APIIcon style={{color: "red", fontSize: "18px"}} />}</span><span>Neon Assistant</span></p>
+            </li> */}
             {/* <li>
               <p className='link_ptags' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}}><span><CenterOn style={{color: centeren? "lime" : "red", fontSize: "18px"}} /></span><span>Auto Focus</span></p>
             </li> */}

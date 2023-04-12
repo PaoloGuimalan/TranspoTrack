@@ -1,4 +1,4 @@
-import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_DESTINATION, SET_DRIVER_ROUTE, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, SET_POSTS_LIST, USER_DETAILS } from "../types/types";
+import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_DESTINATION, SET_DRIVER_ROUTE, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, SET_NEON_ASSISTANT_STATUS, SET_POSTS_LIST, USER_DETAILS } from "../types/types";
 
 export const userdatadetailsstate = {
     busID: "",
@@ -147,6 +147,15 @@ export const setdriverdestination = (state = driverdestinationstate, action) => 
     switch(action.type){
         case SET_DRIVER_DESTINATION:
             return action.driverdestination;
+        default:
+            return state;
+    }
+}
+
+export const setneonassistantstatus = (state = false, action) => {
+    switch(action.type){
+        case SET_NEON_ASSISTANT_STATUS:
+            return action.neonassistantstatus;
         default:
             return state;
     }
