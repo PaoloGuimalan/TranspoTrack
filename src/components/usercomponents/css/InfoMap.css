@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+
 #div_infomap{
     width: 100%;
     max-width: 500px;
@@ -8,6 +10,7 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    font-family: 'Roboto', sans-serif;
 }
 
 #div_header_infomap{

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import '../css/Home.css';
 import Axios from 'axios';
-import { GoogleMap, withScriptjs, withGoogleMap, Marker, Circle, InfoWindow, Polyline } from 'react-google-maps'
+import { GoogleMap, withScriptjs, withGoogleMap, Marker, Circle, InfoWindow, Polyline, Polygon } from 'react-google-maps'
 import Toggle from '@material-ui/icons/Menu'
 import Minimize from '@material-ui/icons/ArrowLeft'
 import { motion } from 'framer-motion';
@@ -28,6 +28,7 @@ import MapIcon from '@material-ui/icons/Map'
 import APIIcon from '@material-ui/icons/Assistant'
 import OpennedIcon from '../imgs/OpenStopIcon.png'
 import InfoMap from './InfoMap';
+import QCPath from '../../../resources/json/cityboundary.json'
 
 function Map(){
 
@@ -137,6 +138,15 @@ function Map(){
               mapTypeId: 'satellite' //roadmap, satellite, terrain, hybrid
             }}
           >
+            <Polygon
+              draggable={false}
+              editable={false}
+              paths={[QCPath.coordinates[0][0], QCPath.coordinates[0][0]]}
+              options={{
+                fillColor: "transparent",
+                strokeColor: "orange"
+              }}
+            />
             <Marker 
               title='Your Location'
               position={coords} 

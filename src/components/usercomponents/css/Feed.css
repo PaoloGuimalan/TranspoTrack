@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
 #div_feed_main{
     background-color: transparent;
     width: 100%;
@@ -15,7 +17,8 @@
 
 #p_header_feed_label{
     font-weight: bold;
-    font-size: 15px;
+    font-size: 17px;
+    font-family: 'Roboto', sans-serif;
 }
 
 #div_posts_feed{
@@ -75,6 +78,7 @@
     align-items: flex-start;
     padding-left: 15px;
     padding-right: 15px;
+    font-family: 'Roboto', sans-serif;
   }
 
   .p_labels_post{
