@@ -26,7 +26,7 @@ import { userdatadetailsstate } from '../../../redux/action/action';
 import Feed from './Feed';
 import MapIcon from '@material-ui/icons/Map'
 import APIIcon from '@material-ui/icons/Assistant'
-import OpennedIcon from '../imgs/OpenStopIcon.png'
+import OpennedIcon from '../imgs/DriverRouteStations.png'
 import InfoMap from './InfoMap';
 import QCPath from '../../../resources/json/cityboundary.json'
 
@@ -206,7 +206,7 @@ function Map(){
                 ) : "" : ""
               )
             })}
-            {busstopslist.map((data, i) => {
+            {/* {busstopslist.map((data, i) => {
               return(
                 <Marker
                   icon={{
@@ -219,6 +219,24 @@ function Map(){
                   }}
                   key={i}
                   position={{lat: parseFloat(data.coordinates.latitude), lng: parseFloat(data.coordinates.longitude)}}
+                >
+                  
+                </Marker>
+              )
+            })} */}
+            {driverroute.stationList.map((data, i) => {
+              return(
+                <Marker
+                  icon={{
+                    url: OpennedIcon,
+                    anchor: new google.maps.Point(25, 25),
+                    scaledSize: new google.maps.Size(25, 25),
+                  }}
+                  onClick={() => { 
+                    // dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) 
+                  }}
+                  key={i}
+                  position={{lat: parseFloat(data.coordinates[1]), lng: parseFloat(data.coordinates[0])}}
                 >
                   
                 </Marker>
