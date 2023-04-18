@@ -184,12 +184,12 @@ function Login() {
                 <div id='img_carier'></div>
             </li>
             <li className='li_login'>
-                <nav>
+                <nav id='nav_loginform'>
                     <li>
                         <p id='label_login'>TranspoTrack</p>
                         <p id='label_poweredby'>Powered by BusTrack</p>
                     </li>
-                    <li>
+                    <li id='li_loginform_container'>
                         {authenticationMark? (
                             <nav>
                                 <li>
@@ -200,11 +200,11 @@ function Login() {
                                 </li>
                             </nav>
                         ) : (
-                            <nav>
-                                <li>
+                            <nav id='nav_loginform_inner'>
+                                <li className='li_input_holder'>
                                     <input type='text' placeholder='Email' className='input_login' value={email} onChange={(e) => {setemail(e.target.value)}} />
                                 </li>
-                                <li>
+                                <li className='li_input_holder'>
                                     <input type='password' placeholder='Password' className='input_login' value={password} onChange={(e) => {setpassword(e.target.value)}} />
                                 </li>
                                 {/* <li>
@@ -218,7 +218,7 @@ function Login() {
                                     <button id='btn_login' onClick={() => {loginTrigger()}}>Login</button>
                                 </li>
                                 <li>
-                                    <p className='no_label_login'>No Account Yet? <Link to='/register'>Register here.</Link></p>
+                                    <p className='no_label_login'>No Account Yet? <Link to='/register' style={{color: "white"}}>Register here.</Link></p>
                                 </li>
                             </nav>
                         )}

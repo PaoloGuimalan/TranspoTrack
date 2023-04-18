@@ -12,7 +12,12 @@ function IndvPost({psts}){
 
     return(
         <div className="div_postsIndv">
-            <motion.div onClick={() => { setexpandPost(!expandPost) }} id='div_img_container' style={{backgroundImage: `linear-gradient(transparent, black), url(${psts.preview})`}}>
+            <motion.div
+            animate={{
+                borderBottomLeftRadius: expandPost? "0px" : "10px",
+                borderBottomRightRadius: expandPost? "0px" : "10px"
+            }}
+            onClick={() => { setexpandPost(!expandPost) }} id='div_img_container' style={{backgroundImage: `linear-gradient(transparent, black), url(${psts.preview})`}}>
                 <div id='div_preview_labels_container'>
                     <p className='p_labels_post'>{psts.date}</p>
                     <p className='p_labels_post'>{psts.title}</p>
@@ -36,10 +41,30 @@ function IndvPost({psts}){
     )
 }
 
+function IndvPostMini({psts}){
+
+    const [expandPost, setexpandPost] = useState(false)
+
+    return(
+        <div className="div_postsIndvMini">
+            <div className='div_postIndvMini_divider'>
+                <p id='p_postIndvMini_label_time'>{psts.date}</p>
+                <p id='p_postIndvMini_label_title'>{psts.title}</p>
+                <p id='p_postIndvMini_label_content'>{psts.content}</p>
+            </div>
+            <div className='div_postIndvMini_divider'>
+                <img src={psts.preview} className='img_postIndvMini_preview'/>
+            </div>
+        </div>
+    )
+}
+
 function Feed() {
 
   const postslist = useSelector(state => state.postslist)
   const dispatch = useDispatch()
+
+  var defaultMapping = [1,2]
 
   useEffect(() => {
     initPosts()
@@ -66,14 +91,40 @@ function Feed() {
   return (
     <div id='div_feed_main'>
         <div id='div_header_feed'>
-            <p id='p_header_feed_label'>Updates & Feed</p>
+            {/* <p id='p_header_feed_label'>Updates & Feed</p> */}
         </div>
         <div id='div_posts_feed'>
-            {postslist.map((psts, i) => {
-                return(
-                    <IndvPost key={psts.postID} psts={psts} />
-                )
-            })}
+            {postslist.length != 0? (
+                postslist.map((psts, i) => {
+                    if(i == 0){
+                        return(
+                            <IndvPost key={psts.postID} psts={psts} />
+                        )
+                    }
+                })
+            ) : (
+                <div className="div_postsIndvSkeleton">     
+                </div>
+            )}
+        </div>
+        <div id='div_posts_feed'>
+            <p id='p_label_other_updates'>Other Updates</p>
+            {postslist.length != 0? (
+                postslist.map((psts, i) => {
+                    if(i > 0){
+                        return(
+                            <IndvPostMini key={psts.postID} psts={psts} />
+                        )
+                    }
+                })
+            ) : (
+                defaultMapping.map((dm, i) => {
+                    return(
+                        <div className="div_postsIndvMiniSkeleton">
+                        </div>
+                    )
+                })
+            )}
         </div>
     </div>
   )

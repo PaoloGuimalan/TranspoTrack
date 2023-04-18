@@ -136,7 +136,7 @@ function InfoMap() {
   return (
     <div id='div_infomap'>
         <div id='div_header_infomap'>
-            <p id='p_infomap_label'>Info Map</p>
+            {/* <p id='p_infomap_label'>Info Map</p> */}
         </div>
         <div id='div_route_info'>
             <p id='p_route_info_label'><b>Bus ID:</b> {userDataDetails.busID}</p>
@@ -218,7 +218,7 @@ function InfoMap() {
                 )
             })}
         </div>
-        <div id='div_headway_container'>
+        {/* <div id='div_headway_container'>
             <div id="div_headway_label">
                 <p id='p_headway_label'>Headway</p>
             </div>
@@ -226,7 +226,7 @@ function InfoMap() {
                 <p id='p_route_info_label'><b>Front Distance:</b> Bus ID | Distance</p>
                 <p id='p_route_info_label'><b>Rear Distance:</b> Bus ID | Distance</p>
             </div>
-        </div>
+        </div> */}
     </div>
   )
 }

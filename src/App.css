@@ -1,5 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
+html {
+  /* background-color: red; */
+  overflow: hidden;
+  width: 100%;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  /* prevent overscroll bounce*/
+  /* overflow-y: scroll; */
+  -webkit-overflow-scrolling: touch;
+  /* iOS velocity scrolling */
+}
+
 .App {
   text-align: center;
 }

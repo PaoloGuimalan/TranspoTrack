@@ -277,7 +277,7 @@ function Register() {
                                         regtype == "Driver"? (
                                             <nav>
                                                 <li>
-                                                    <p id='label_login'>Register as Driver</p>
+                                                    <p id='label_register'>Register as Driver</p>
                                                 </li>
                                                 <li>
                                                     <nav>
@@ -360,7 +360,7 @@ function Register() {
                                     )}
                                 </li>
                                 <li>
-                                    <p className='no_label_login'>Have Already an Account? <Link to='/login'>Login here.</Link></p>
+                                    <p className='no_label_login'>Have Already an Account? <Link to='/login' style={{color: "white"}}>Login here.</Link></p>
                                 </li>
                             </nav>
                         </li>

@@ -5,15 +5,15 @@ import { GoogleMap, withScriptjs, withGoogleMap, Marker, Circle, InfoWindow, Pol
 import Toggle from '@material-ui/icons/Menu'
 import Minimize from '@material-ui/icons/ArrowLeft'
 import { motion } from 'framer-motion';
-import HomeToggle from '@material-ui/icons/Home'
+import HomeToggle from '@material-ui/icons/HomeOutlined'
 import LogoutToggle from '@material-ui/icons/ExitToApp'
-import AccountToggle from '@material-ui/icons/Person'
+import AccountToggle from '@material-ui/icons/PersonOutline'
 import AvRoutesToggle from '@material-ui/icons/Directions'
 import InfoToggleOn from '@material-ui/icons/Label'
 import InfoToggle from '@material-ui/icons/LabelOutlined'
 import CenterOn from '@material-ui/icons/CenterFocusStrong'
-import InfoMapIcon from '@material-ui/icons/AccountTree'
-import { Link, useNavigate, Routes, Route } from 'react-router-dom';
+import InfoMapIcon from '@material-ui/icons/AccountTreeOutlined'
+import { Link, useNavigate, Routes, Route, useParams, useLocation } from 'react-router-dom';
 import CommuterIcon from '../imgs/commutericon.png';
 import DriverIcon from '../imgs/drivericon.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
@@ -24,11 +24,12 @@ import RoutesConfig from './RoutesConfig';
 import Account from './Account';
 import { userdatadetailsstate } from '../../../redux/action/action';
 import Feed from './Feed';
-import MapIcon from '@material-ui/icons/Map'
+import MapIcon from '@material-ui/icons/MapOutlined'
 import APIIcon from '@material-ui/icons/Assistant'
 import OpennedIcon from '../imgs/DriverRouteStations.png'
 import InfoMap from './InfoMap';
 import QCPath from '../../../resources/json/cityboundary.json'
+import DriverDefaultImg from '../imgs/defaultimg.png'
 
 function Map(){
 
@@ -273,7 +274,7 @@ const MapRoute = () => {
   const [loaderInMap, setloaderInMap] = useState(false);
 
   return(
-    <div style={{ width: "100%", height: "100vh"}}>
+    <div style={{ width: "100%", height: "calc(100% - 50px)"}}>
       <div id='div_user_shortcut_details'>
         <nav id='nav_user_shortcut_details'>
           <li>
@@ -341,6 +342,19 @@ function Home() {
   const driverroute = useSelector(state => state.driverroute);
 
   const neonassistantstatus = useSelector(state => state.neonassistantstatus);
+
+  const pageIdentifier = useLocation()
+  const [currentPageId, setcurrentPageId] = useState("")
+
+  useEffect(() => {
+    // console.log(pageIdentifier.pathname.split("/")[2])
+    if(pageIdentifier.pathname.split("/")[2] == undefined){
+      setcurrentPageId("")
+    }
+    else{
+      setcurrentPageId(pageIdentifier.pathname.split("/")[2])
+    }
+  },[pageIdentifier])
 
   useEffect(() => {
     if((commuter == "" || commuter == null) && (driver == "" || driver == null)){
@@ -689,6 +703,7 @@ function Home() {
 
   return (
     <div id='div_home'>
+      {togglemenu? (
       <motion.div id='navigation_home'
         animate={{
           maxWidth: togglemenu? "300px" : "60px",
@@ -701,15 +716,21 @@ function Home() {
         }}
       >
         <button onClick={() => {settogglemenu(!togglemenu)}} id='btn_menu'>{togglemenu? <Minimize /> : <Toggle />}</button>
-        {togglemenu? (
           <nav id='nav_exposed'>
             <li>
+              <div id='div_profile_preview'>
+                <img src={DriverDefaultImg} id='img_profile_preview' />
+                <p id='p_label_userName'>{userDataDetails.firstName} {userDataDetails.middleName == "N/A"? "" : userDataDetails.middleName} {userDataDetails.lastName}</p>
+                <p id='p_label_userID'>{userDataDetails.userID}</p>
+              </div>
+            </li>
+            {/* <li>
               <motion.p id='user_id_tag'
                 animate={{
                   backgroundColor: userDataDetails.userType == "Commuter"? "lime" : "orange"
                 }}
               >User ID: {userDataDetails.userID}</motion.p>
-            </li>
+            </li> */}
             <li>
               <h4 id='navigations_h4'>Navigations</h4>
             </li>
@@ -729,7 +750,7 @@ function Home() {
               <h4 id='navigations_h4_2'>Controls</h4>
             </li>
             <li>
-              <p className='link_ptags' onClick={() => { locationSharing(!infotoggle) }}><span>{infotoggle? <InfoToggleOn style={{color: "lime", fontSize: "18px"}} /> : <InfoToggle style={{color: "red", fontSize: "18px"}} />}</span><span>Enable Location Sharing</span></p>
+              <p className='link_ptags' onClick={() => { locationSharing(!infotoggle) }}><span>{infotoggle? <InfoToggleOn style={{color: "lime", fontSize: "18px"}} /> : <InfoToggle style={{color: "red", fontSize: "18px"}} />}</span><span>{infotoggle? "Disable" : "Enable"} Location Sharing</span></p>
             </li>
             {/* <li>
               <p className='link_ptags' onClick={() => { dispatch({type: SET_NEON_ASSISTANT_STATUS, neonassistantstatus: !neonassistantstatus}) }}><span>{neonassistantstatus? <APIIcon style={{color: "lime", fontSize: "18px"}} /> : <APIIcon style={{color: "red", fontSize: "18px"}} />}</span><span>Neon Assistant</span></p>
@@ -741,62 +762,24 @@ function Home() {
               <button id='btn_logout' onClick={logoutfunc}>Logout</button>
             </li>
           </nav>
-        ) : (
-          <nav id='nav_navigation'>
-            {/* <li className='li_nav_navigations'>
-              <motion.button 
-              whileHover={{
-                scale: 1.2
-              }}
-              className='btn_navigations_toggle' onClick={() => navigate("/home")}><HomeToggle /></motion.button>
-            </li>
-            <li className='li_nav_navigations'>
-              <motion.button 
-              whileHover={{
-                scale: 1.2
-              }}
-              className='btn_navigations_toggle' onClick={() => navigate("/home/map")}><MapIcon /></motion.button>
-            </li>
-            <li className='li_nav_navigations'>
-              <motion.button 
-              whileHover={{
-                scale: 1.2
-              }}
-              className='btn_navigations_toggle' onClick={() => navigate("/home/avroutes")}><InfoMapIcon /></motion.button>
-            </li>
-            <li className='li_nav_navigations'>
-              <motion.button 
-              whileHover={{
-                scale: 1.2
-              }}
-              className='btn_navigations_toggle' onClick={() => navigate("/home/account")}><AccountToggle /></motion.button>
-            </li>
-            <li className='li_nav_navigations'>
-              <motion.button 
-              whileHover={{
-                scale: 1.2
-              }}
-              title='Toggle User Details'
-              className='btn_navigations_toggle' onClick={() => {locationSharing(!infotoggle)}}>{infotoggle? <InfoToggleOn style={{color: "lime"}} /> : <InfoToggle style={{color: "red"}} />}</motion.button>
-            </li> */}
-            {/* <li className='li_nav_navigations'>
-              <motion.button 
-              whileHover={{
-                scale: 1.2
-              }}
-              className='btn_navigations_toggle' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}} ><CenterOn style={{color: centeren? "lime" : "red"}} /></motion.button>
-            </li> */}
-            {/* <li className='li_nav_navigations'>
-              <motion.button
-              whileHover={{
-                scale: 1.2
-              }} 
-              onClick={logoutfunc}
-              className='btn_navigations_toggle'><LogoutToggle /></motion.button>
-            </li> */}
-          </nav>
-        )}
       </motion.div>
+      ) : null}
+      <div id='div_header_main'>
+        <button onClick={() => {settogglemenu(!togglemenu)}} id='btn_menu'>{togglemenu? <Minimize /> : <Toggle />}</button>
+        <p id='p_page_label'>{
+          currentPageId == ""? "Updates & Feed" : 
+          currentPageId == "map"? "Map" : 
+          currentPageId == "avroutes"? "Info Map" : 
+          currentPageId == "account"? "Account" : ""
+        }</p>
+        <div id='div_account_image_container'>
+          <motion.div id='div_account_image_btn_holder' onClick={() => {
+            navigate("/home/account")
+          }}>
+            <img src={DriverDefaultImg} id='img_default_driver_img'/>
+          </motion.div>
+        </div>
+      </div>
       <Routes>
         <Route path='/' element={<Feed />} />
         <Route path='/map' element={<MapRoute />} />
