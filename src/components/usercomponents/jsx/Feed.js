@@ -41,12 +41,14 @@ function IndvPost({psts}){
     )
 }
 
-function IndvPostMini({psts}){
+function IndvPostMini({psts, clickPost}){
 
     const [expandPost, setexpandPost] = useState(false)
 
     return(
-        <div className="div_postsIndvMini">
+        <div className="div_postsIndvMini" onClick={() => {
+            clickPost(psts)
+        }}>
             <div className='div_postIndvMini_divider'>
                 <p id='p_postIndvMini_label_time'>{psts.date}</p>
                 <p id='p_postIndvMini_label_title'>{psts.title}</p>
@@ -63,6 +65,17 @@ function Feed() {
 
   const postslist = useSelector(state => state.postslist)
   const dispatch = useDispatch()
+
+  const defaultSelectedPost = {
+    postID: "",
+    title: "",
+    preview: "",
+    content: "",
+    viewers: "",
+    date: "",
+    time: "",
+  }
+  const [selectedPost, setselectedPost] = useState(defaultSelectedPost)
 
   var defaultMapping = [1,2]
 
@@ -90,6 +103,38 @@ function Feed() {
 
   return (
     <div id='div_feed_main'>
+        <motion.div id='div_background_black_blur' animate={{
+            display: selectedPost.postID != ""? "block" : "none"
+        }}></motion.div>
+        <motion.div id='div_post_details_window'
+            animate={{
+                top: selectedPost.postID != ""? "20%" : "100%"
+            }}
+            transition={{
+                bounce: 0,
+                duration: 0.2
+            }}
+        >
+            <div id='div_overall_post_container'>
+                <div id='div_draggable_bar_container'>
+                    <div id='div_draggable_bar_hold' onClick={() => {
+                        setselectedPost(defaultSelectedPost)
+                    }}></div>
+                </div>
+                <div id='div_image_preview_holder'>
+                    <img src={selectedPost.preview} id='img_preview_post_mini_ab'/>
+                </div>
+                <div id='div_post_title_holder_ab'>
+                    <p id='p_post_title_ab'>{selectedPost.title}</p>
+                    <p id='p_post_date_time_ab'>{selectedPost.date} {selectedPost.time}</p>
+                    {selectedPost.content.split("***").map((ps, i) => {
+                    return(
+                        <p key={i} className='p_content_post_mini_ab'>{ps}</p>
+                        )
+                    })}
+                </div>
+            </div>
+        </motion.div>
         <div id='div_header_feed'>
             {/* <p id='p_header_feed_label'>Updates & Feed</p> */}
         </div>
@@ -98,7 +143,7 @@ function Feed() {
                 postslist.map((psts, i) => {
                     if(i == 0){
                         return(
-                            <IndvPost key={psts.postID} psts={psts} />
+                            <IndvPost key={`${psts.postID}_${i}`} psts={psts} />
                         )
                     }
                 })
@@ -113,7 +158,7 @@ function Feed() {
                 postslist.map((psts, i) => {
                     if(i > 0){
                         return(
-                            <IndvPostMini key={psts.postID} psts={psts} />
+                            <IndvPostMini key={psts.postID} psts={psts} clickPost={setselectedPost} />
                         )
                     }
                 })
