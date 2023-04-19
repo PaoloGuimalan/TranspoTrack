@@ -274,6 +274,29 @@
     align-items: center;
 }
 
+#div_infowindow_station_details{
+    width: 210px;
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.p_station_details{
+    margin: 0px;
+    text-align: left;
+}
+
+.p_station_details:nth-of-type(2){
+    font-weight: bold;
+}
+
+.p_station_details:nth-of-type(3){
+    margin-top: 10px;
+}
+
 @media screen and (max-width: 720px) {
     #navigation_home{
         background-color: transparent;

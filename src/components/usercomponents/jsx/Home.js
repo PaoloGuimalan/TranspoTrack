@@ -60,9 +60,43 @@ function Map(){
   const driverroute = useSelector(state => state.driverroute);
 
   const [livelist, setlivelist] = useState([]);
+  const [selectedMarker, setselectedMarker] = useState("")
+  const [waitingList, setwaitingList] = useState([])
 
   const commuter = localStorage.getItem('tokencommuter');
   const driver = localStorage.getItem('tokendriver');
+
+  useEffect(() => {
+    initWaitingCount()
+
+    return () => {
+        initWaitingCount = () => {  }
+    }
+  },[])
+
+  var initWaitingCount = () => {
+    Axios.get(`${URL_TWO}/getWaitingCount`, {
+        headers:{
+            "x-access-tokendriver": localStorage.getItem("tokendriver")
+        }
+    }).then((response) => {
+        if(response.data.status){
+            // console.log(response.data.result)
+            setwaitingList(response.data.result)
+        }
+        else{
+            console.log(response.data.message)
+        }
+        setTimeout(() => {
+            initWaitingCount()
+        },30000)
+    }).catch((err) => {
+        console.log(err)
+        setTimeout(() => {
+            initWaitingCount()
+        },30000)
+    })
+  }
 
   useEffect(() => {
     setInterval(() => {
@@ -229,15 +263,32 @@ function Map(){
               )
             })} */}
             {driverroute.stationList.map((data, i) => {
+              if(data.stationID == selectedMarker){
+                return(
+                  <InfoWindow
+                  onCloseClick={() => {
+                    setselectedMarker("")
+                  }}
+                  position={{lat: parseFloat(data.coordinates[1]), lng: parseFloat(data.coordinates[0])}} options={{disableAutoPan: true}}>
+                    <div id='div_infowindow_station_details'>
+                      <p className='p_station_details'>{data.stationID}</p>
+                      <p className='p_station_details'>{data.stationName}</p>
+                      <p className='p_station_details'>Waiting Commuters: {JSON.stringify(waitingList.filter((cnt, i) => cnt._id == data.stationID)[0]?.count? waitingList.filter((cnt, i) => cnt._id == data.stationID)[0]?.count : 0)}</p>
+                    </div>
+                  </InfoWindow>
+                )
+              }
+            })}
+            {driverroute.stationList.map((data, i) => {
               return(
                 <Marker
                   icon={{
                     url: OpennedIcon,
-                    anchor: new google.maps.Point(25, 25),
+                    anchor: new google.maps.Point(12, 0),
                     scaledSize: new google.maps.Size(25, 25),
                   }}
                   onClick={() => { 
-                    // dispatch({ type: SET_SELECTED_MARKER, selectedmarker: data.busStopID }) 
+                    setselectedMarker(data.stationID) 
                   }}
                   key={i}
                   position={{lat: parseFloat(data.coordinates[1]), lng: parseFloat(data.coordinates[0])}}
