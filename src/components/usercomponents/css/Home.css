@@ -297,6 +297,113 @@
     margin-top: 10px;
 }
 
+#div_driver_mapdetails_window{
+    background-color: white;
+    position: absolute;
+    width: 100%;
+    top: 87%;
+    height: 25%;
+    z-index: 1;
+    box-shadow: 0px 0px 2px black;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+}
+
+#div_draggable_bar_container{
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  #div_draggable_bar_hold{
+    width: 90%;
+    height: 8px;
+    background-color: #C3C3C3;
+    max-width: 100px;
+    border-radius: 8px;
+  }
+
+  #div_route_details{
+    background-color: transparent;
+    width: calc(100% - 30px);
+    display: flex;
+    padding-left: 15px;
+    padding-right: 15px;
+    flex-direction: column;
+  }
+
+  #p_routename_label{
+    margin: 0px;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    text-align: left;
+  }
+
+  #p_stationName_label{
+    margin: 0px;
+    text-align: left;
+    margin-bottom: 15px;
+  }
+
+  #div_latlng_container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  .span_latlng_holder{
+    background-color: #404040;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+  }
+
+  #div_navigations_stations{
+    background-color: transparent;
+    width: calc(100% - 40px);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    position: absolute;
+    bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  #p_stationName_ind{
+    margin: 10px;
+    text-align: center;
+    margin-bottom: 15px;
+    height: 100%;
+    flex: 1;
+    background-color: #C3C3C3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .btn_navigations_stations{
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+  }
+
 @media screen and (max-width: 720px) {
     #navigation_home{
         background-color: transparent;

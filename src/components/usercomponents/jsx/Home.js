@@ -27,10 +27,13 @@ import Feed from './Feed';
 import MapIcon from '@material-ui/icons/MapOutlined'
 import APIIcon from '@material-ui/icons/Assistant'
 import OpennedIcon from '../imgs/DriverRouteStations.png'
+import CurrentStopIcon from '../imgs/DriverRouteStations_current.png'
 import InfoMap from './InfoMap';
 import QCPath from '../../../resources/json/cityboundary.json'
 import DriverDefaultImg from '../imgs/defaultimg.png'
 import LoadingIcon from '@material-ui/icons/SyncOutlined'
+import PrevIcon from '@material-ui/icons/ArrowBackRounded'
+import NextIcon from '@material-ui/icons/ArrowForwardRounded'
 
 function Map(){
 
@@ -58,6 +61,7 @@ function Map(){
   const userDataDetails = useSelector(state => state.userdatadetails);
   const busstopslist = useSelector(state => state.busstopslist)
   const driverroute = useSelector(state => state.driverroute);
+  const driverdestination = useSelector(state => state.driverdestination)
 
   const [livelist, setlivelist] = useState([]);
   const [selectedMarker, setselectedMarker] = useState("")
@@ -271,7 +275,7 @@ function Map(){
                   }}
                   position={{lat: parseFloat(data.coordinates[1]), lng: parseFloat(data.coordinates[0])}} options={{disableAutoPan: true}}>
                     <div id='div_infowindow_station_details'>
-                      <p className='p_station_details'>{data.stationID}</p>
+                      <p className='p_station_details'>{data.stationID} {driverdestination.stationID == data.stationID? driverdestination.index == i? "(Current/Previous Station)" : "" : ""}</p>
                       <p className='p_station_details'>{data.stationName}</p>
                       <p className='p_station_details'>Waiting Commuters: {JSON.stringify(waitingList.filter((cnt, i) => cnt._id == data.stationID)[0]?.count? waitingList.filter((cnt, i) => cnt._id == data.stationID)[0]?.count : 0)}</p>
                     </div>
@@ -283,7 +287,7 @@ function Map(){
               return(
                 <Marker
                   icon={{
-                    url: OpennedIcon,
+                    url: driverdestination.stationID == data.stationID? driverdestination.index == i? CurrentStopIcon : OpennedIcon : OpennedIcon,
                     anchor: new google.maps.Point(12, 0),
                     scaledSize: new google.maps.Size(25, 25),
                   }}
@@ -320,48 +324,92 @@ const WrappedMap = withScriptjs(withGoogleMap(Map));
 const MapRoute = () => {
 
   const userDataDetails = useSelector(state => state.userdatadetails);
+  const driverdestination = useSelector(state => state.driverdestination)
+  const driverroute = useSelector(state => state.driverroute);
   const coords = useSelector(state => state.coords);
 
   const commutertraveldata = useSelector(state => state.commutertraveldata);
   const alltraveldata = useSelector(state => state.drivertraveldata);
 
   const [loaderInMap, setloaderInMap] = useState(false);
+  const [expandDMDW, setexpandDMDW] = useState(false)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    // console.log(driverroute.stationList.filter((sn, i) => sn.stationID == driverdestination.stationID && i == driverdestination.index))
+  },[])
+
+  const NextStationAction = () => {
+    // alert("Next")
+    if(driverdestination.index == driverroute.stationList.length - 1){
+      dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
+        stationID: driverroute.stationList[0].stationID,
+        stationName: driverroute.stationList[0].stationName,
+        index: 0
+      }})
+    }
+    else{
+      dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
+        stationID: driverroute.stationList[driverdestination.index + 1].stationID,
+        stationName: driverroute.stationList[driverdestination.index + 1].stationName,
+        index: driverdestination.index + 1
+      }})
+    }
+  }
+
+  const PrevStationAction = () => {
+    // alert("Prev")
+    if(driverdestination.index == 0){
+      dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
+        stationID: driverroute.stationList[driverroute.stationList.length - 1].stationID,
+        stationName: driverroute.stationList[driverroute.stationList.length - 1].stationName,
+        index: driverroute.stationList.length - 1
+      }})
+    }
+    else{
+      dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
+        stationID: driverroute.stationList[driverdestination.index - 1].stationID,
+        stationName: driverroute.stationList[driverdestination.index - 1].stationName,
+        index: driverdestination.index - 1
+      }})
+    }
+  }
 
   return(
     <div style={{ width: "100%", height: "calc(100% - 50px)"}}>
-      <div id='div_user_shortcut_details'>
-        <nav id='nav_user_shortcut_details'>
-          <li>
-            <p className='labeltext_user_shortcut_details'><b>User ID:</b> {userDataDetails.userID}</p>
-          </li>
-          <li>
-            <p className='labeltext_user_shortcut_details'><b>Current Destination:</b> {alltraveldata.destination}</p>
-          </li>
-          <li>
-            <motion.p
-              initial={{
-                display: "none"
-              }}
-              animate={{
-                display: userDataDetails.userType == "Driver"? loaderInMap? "block" : "none" : "none"
-              }}
-              className='labeltext_user_shortcut_details'
-              ><b>Route: </b>{alltraveldata.destination_one} - {alltraveldata.destination_two}</motion.p>
-          </li>
-          <li>
-            <button className='labeltext_user_shortcut_details last_labeltext' onClick={() => {setloaderInMap(!loaderInMap)}}>In Map Location</button>
-            <motion.p
-            initial={{
-              display: "none"
-            }}
-            animate={{
-              display: loaderInMap? "block" : "none"
-            }}
-            className='latlng_text'
-            >Lat: {coords.lat}<br />Lng: {coords.lng}</motion.p>
-          </li>
-        </nav>
-      </div>
+      <motion.div id='div_driver_mapdetails_window'
+        animate={{
+          top: expandDMDW? "73%" : "87%"
+        }}
+        transition={{
+          bounce: 0,
+          duration: 0.1
+        }}
+      >
+        <div id='div_draggable_bar_container'>
+          <div id='div_draggable_bar_hold' onClick={() => {
+              setexpandDMDW(!expandDMDW)
+          }}></div>
+        </div>
+        <div id='div_route_details'>
+          <p id='p_routename_label'>{userDataDetails.routeName}</p>
+          <p id='p_stationName_label'>{driverroute.stationList.filter((sn, i) => sn.stationID == driverdestination.stationID && i == driverdestination.index)[0]?.stationName}</p>
+        </div>
+        <div id='div_latlng_container'>
+          <span className='span_latlng_holder'>Lat: {coords.lat}</span>
+          <span className='span_latlng_holder'>Lng: {coords.lng}</span>
+        </div>
+        <div id='div_navigations_stations'>
+          <button className='btn_navigations_stations' onClick={() => {
+            PrevStationAction()
+          }}><PrevIcon /></button>
+          <p id='p_stationName_ind'>{driverroute.stationList.filter((sn, i) => sn.stationID == driverdestination.stationID && i == driverdestination.index)[0]?.stationName}</p>
+          <button className='btn_navigations_stations' onClick={() => {
+            NextStationAction()
+          }}><NextIcon /></button>
+        </div>
+      </motion.div>
       <WrappedMap 
         googleMapURL={`https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyAeogbvkQJHv5Xm0Ph_O_ehNWBxkdr_1CU`}
         loadingElement={<div style={{height: '100%'}} />}
