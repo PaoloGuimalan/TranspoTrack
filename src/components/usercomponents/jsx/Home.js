@@ -30,6 +30,7 @@ import OpennedIcon from '../imgs/DriverRouteStations.png'
 import InfoMap from './InfoMap';
 import QCPath from '../../../resources/json/cityboundary.json'
 import DriverDefaultImg from '../imgs/defaultimg.png'
+import LoadingIcon from '@material-ui/icons/SyncOutlined'
 
 function Map(){
 
@@ -136,6 +137,8 @@ function Map(){
               zoomControlOptions: { position: 3 },
               streetViewControl:false,
               fullscreenControl:true,
+              labels: true,
+              // mapTypeId: google.maps.MapTypeId.HYBRID
               mapTypeId: 'satellite' //roadmap, satellite, terrain, hybrid
             }}
           >
@@ -703,89 +706,107 @@ function Home() {
 
   return (
     <div id='div_home'>
-      {togglemenu? (
-      <motion.div id='navigation_home'
-        animate={{
-          maxWidth: togglemenu? "300px" : "60px",
-          backgroundColor: togglemenu? "white" : "transparent",
-          boxShadow: togglemenu? "0px 0px 3px black" : "none"
-        }}
-        transition={{
-          bounce: 0,
-          duration: 0.2
-        }}
-      >
-        <button onClick={() => {settogglemenu(!togglemenu)}} id='btn_menu'>{togglemenu? <Minimize /> : <Toggle />}</button>
-          <nav id='nav_exposed'>
-            <li>
-              <div id='div_profile_preview'>
-                <img src={DriverDefaultImg} id='img_profile_preview' />
-                <p id='p_label_userName'>{userDataDetails.firstName} {userDataDetails.middleName == "N/A"? "" : userDataDetails.middleName} {userDataDetails.lastName}</p>
-                <p id='p_label_userID'>{userDataDetails.userID}</p>
-              </div>
-            </li>
-            {/* <li>
-              <motion.p id='user_id_tag'
-                animate={{
-                  backgroundColor: userDataDetails.userType == "Commuter"? "lime" : "orange"
-                }}
-              >User ID: {userDataDetails.userID}</motion.p>
-            </li> */}
-            <li>
-              <h4 id='navigations_h4'>Navigations</h4>
-            </li>
-            <li>
-              <Link to='/home' className='links_tag_navigation'><p className='link_ptags'><span><HomeToggle style={{fontSize: "18px"}} /></span><span>Home</span></p></Link>
-            </li>
-            <li>
-              <Link to='/home/map' className='links_tag_navigation'><p className='link_ptags'><span><MapIcon style={{fontSize: "18px"}} /></span><span>Map</span></p></Link>
-            </li>
-            <li>
-              <Link to='/home/avroutes' className='links_tag_navigation'><p className='link_ptags'><span><InfoMapIcon style={{fontSize: "18px"}} /></span><span>Info Map</span></p></Link>
-            </li>
-            <li>
-              <Link to='/home/account' className='links_tag_navigation'><p className='link_ptags'><span><AccountToggle style={{fontSize: "18px"}} /></span><span>Account</span></p></Link>
-            </li>
-            <li>
-              <h4 id='navigations_h4_2'>Controls</h4>
-            </li>
-            <li>
-              <p className='link_ptags' onClick={() => { locationSharing(!infotoggle) }}><span>{infotoggle? <InfoToggleOn style={{color: "lime", fontSize: "18px"}} /> : <InfoToggle style={{color: "red", fontSize: "18px"}} />}</span><span>{infotoggle? "Disable" : "Enable"} Location Sharing</span></p>
-            </li>
-            {/* <li>
-              <p className='link_ptags' onClick={() => { dispatch({type: SET_NEON_ASSISTANT_STATUS, neonassistantstatus: !neonassistantstatus}) }}><span>{neonassistantstatus? <APIIcon style={{color: "lime", fontSize: "18px"}} /> : <APIIcon style={{color: "red", fontSize: "18px"}} />}</span><span>Neon Assistant</span></p>
-            </li> */}
-            {/* <li>
-              <p className='link_ptags' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}}><span><CenterOn style={{color: centeren? "lime" : "red", fontSize: "18px"}} /></span><span>Auto Focus</span></p>
-            </li> */}
-            <li>
-              <button id='btn_logout' onClick={logoutfunc}>Logout</button>
-            </li>
-          </nav>
-      </motion.div>
-      ) : null}
-      <div id='div_header_main'>
-        <button onClick={() => {settogglemenu(!togglemenu)}} id='btn_menu'>{togglemenu? <Minimize /> : <Toggle />}</button>
-        <p id='p_page_label'>{
-          currentPageId == ""? "Updates & Feed" : 
-          currentPageId == "map"? "Map" : 
-          currentPageId == "avroutes"? "Info Map" : 
-          currentPageId == "account"? "Account" : ""
-        }</p>
-        <div id='div_account_image_container'>
-          <motion.div id='div_account_image_btn_holder' onClick={() => {
-            navigate("/home/account")
+      {userDataDetails.userID != ""? (
+        <>
+          {togglemenu? (
+          <motion.div id='navigation_home'
+            animate={{
+              maxWidth: togglemenu? "300px" : "60px",
+              backgroundColor: togglemenu? "white" : "transparent",
+              boxShadow: togglemenu? "0px 0px 3px black" : "none"
+            }}
+            transition={{
+              bounce: 0,
+              duration: 0.2
+            }}
+          >
+            <button onClick={() => {settogglemenu(!togglemenu)}} id='btn_menu'>{togglemenu? <Minimize /> : <Toggle />}</button>
+              <nav id='nav_exposed'>
+                <li>
+                  <div id='div_profile_preview'>
+                    <img src={DriverDefaultImg} id='img_profile_preview' />
+                    <p id='p_label_userName'>{userDataDetails.firstName} {userDataDetails.middleName == "N/A"? "" : userDataDetails.middleName} {userDataDetails.lastName}</p>
+                    <p id='p_label_userID'>{userDataDetails.userID}</p>
+                  </div>
+                </li>
+                {/* <li>
+                  <motion.p id='user_id_tag'
+                    animate={{
+                      backgroundColor: userDataDetails.userType == "Commuter"? "lime" : "orange"
+                    }}
+                  >User ID: {userDataDetails.userID}</motion.p>
+                </li> */}
+                <li>
+                  <h4 id='navigations_h4'>Navigations</h4>
+                </li>
+                <li>
+                  <Link to='/home' className='links_tag_navigation'><p className='link_ptags'><span><HomeToggle style={{fontSize: "18px"}} /></span><span>Home</span></p></Link>
+                </li>
+                <li>
+                  <Link to='/home/map' className='links_tag_navigation'><p className='link_ptags'><span><MapIcon style={{fontSize: "18px"}} /></span><span>Map</span></p></Link>
+                </li>
+                <li>
+                  <Link to='/home/avroutes' className='links_tag_navigation'><p className='link_ptags'><span><InfoMapIcon style={{fontSize: "18px"}} /></span><span>Info Map</span></p></Link>
+                </li>
+                <li>
+                  <Link to='/home/account' className='links_tag_navigation'><p className='link_ptags'><span><AccountToggle style={{fontSize: "18px"}} /></span><span>Account</span></p></Link>
+                </li>
+                <li>
+                  <h4 id='navigations_h4_2'>Controls</h4>
+                </li>
+                <li>
+                  <p className='link_ptags' onClick={() => { locationSharing(!infotoggle) }}><span>{infotoggle? <InfoToggleOn style={{color: "lime", fontSize: "18px"}} /> : <InfoToggle style={{color: "red", fontSize: "18px"}} />}</span><span>{infotoggle? "Disable" : "Enable"} Location Sharing</span></p>
+                </li>
+                {/* <li>
+                  <p className='link_ptags' onClick={() => { dispatch({type: SET_NEON_ASSISTANT_STATUS, neonassistantstatus: !neonassistantstatus}) }}><span>{neonassistantstatus? <APIIcon style={{color: "lime", fontSize: "18px"}} /> : <APIIcon style={{color: "red", fontSize: "18px"}} />}</span><span>Neon Assistant</span></p>
+                </li> */}
+                {/* <li>
+                  <p className='link_ptags' onClick={() => {dispatch({type: SET_CENTER_EN, centeren: !centeren})}}><span><CenterOn style={{color: centeren? "lime" : "red", fontSize: "18px"}} /></span><span>Auto Focus</span></p>
+                </li> */}
+                <li>
+                  <button id='btn_logout' onClick={logoutfunc}>Logout</button>
+                </li>
+              </nav>
+          </motion.div>
+          ) : null}
+          <div id='div_header_main'>
+            <button onClick={() => {settogglemenu(!togglemenu)}} id='btn_menu'>{togglemenu? <Minimize /> : <Toggle />}</button>
+            <p id='p_page_label'>{
+              currentPageId == ""? "Updates & Feed" : 
+              currentPageId == "map"? "Map" : 
+              currentPageId == "avroutes"? "Info Map" : 
+              currentPageId == "account"? "Account" : ""
+            }</p>
+            <div id='div_account_image_container'>
+              <motion.div id='div_account_image_btn_holder' onClick={() => {
+                navigate("/home/account")
+              }}>
+                <img src={DriverDefaultImg} id='img_default_driver_img'/>
+              </motion.div>
+            </div>
+          </div>
+          <Routes>
+            <Route path='/' element={<Feed />} />
+            <Route path='/map' element={<MapRoute />} />
+            <Route path='/avroutes' element={<InfoMap />} />
+            <Route path='/account' element={<Account />} />
+          </Routes>
+        </>
+      ) : (
+        <div id='div_loading_splash_screen'>
+          <motion.div
+          id='div_loading_anim'
+          animate={{
+            rotate: -360
+          }}
+          transition={{
+            duration: 1,
+            repeat: Infinity
           }}>
-            <img src={DriverDefaultImg} id='img_default_driver_img'/>
+            <LoadingIcon style={{color: "white", fontSize: "35px"}} />
           </motion.div>
         </div>
-      </div>
-      <Routes>
-        <Route path='/' element={<Feed />} />
-        <Route path='/map' element={<MapRoute />} />
-        <Route path='/avroutes' element={<InfoMap />} />
-        <Route path='/account' element={<Account />} />
-      </Routes>
+      )}
     </div>
   )
 }

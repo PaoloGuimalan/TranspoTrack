@@ -251,6 +251,29 @@
     color: #404040;
 }
 
+#div_loading_splash_screen{
+    /* background-color: green; */
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background: url('../imgs/bgimage2_blur.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode:multiply;
+}
+
+#div_loading_anim{
+    background-color: transparent;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 @media screen and (max-width: 720px) {
     #navigation_home{
         background-color: transparent;
