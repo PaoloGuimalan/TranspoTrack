@@ -36,9 +36,31 @@
     text-align: left;
 }
 
-#p_route_info_label{
+.p_route_info_label{
+    margin: 0px;
+    /* font-size: 15px; */
+}
+
+.p_route_info_label:first-of-type{
     margin: 0px;
     font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.p_route_info_label:nth-of-type(2){
+    margin: 0px;
+    font-size: 13px;
+}
+
+.p_route_info_label:nth-of-type(3){
+    margin: 0px;
+    font-size: 13px;
+}
+
+.p_route_info_label:nth-of-type(4){
+    margin: 0px;
+    font-size: 13px;
 }
 
 #div_stationList{
@@ -56,7 +78,7 @@
 .div_stationIndv{
     width: 90%;
     height: auto;
-    min-height: 150px;
+    min-height: 180px;
     max-width: 500px;
     background-color: transparent;
     display: flex;
@@ -64,8 +86,8 @@
 }
 
 .div_bar_container{
-    background-color: blue;
-    width: 25px;
+    background-color: #B7B7B7;
+    width: 20px;
     border-top: solid 1px white;
     border-bottom: solid 1px white;
     display: flex;
@@ -77,7 +99,7 @@
     flex: 1;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
 }
 
 .div_stationInside_container{
@@ -85,7 +107,8 @@
     width: calc(90% - 20px);
     max-width: 270px;
     height: 100px;
-    border-radius: 5px;
+    border-radius: 15px;
+    border-top-left-radius: 0px;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -159,4 +182,11 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+}
+
+#div_stationHeader_icon{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 5px;
 }

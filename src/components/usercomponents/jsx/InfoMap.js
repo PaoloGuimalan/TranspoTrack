@@ -4,8 +4,11 @@ import '../css/InfoMap.css'
 import Axios from 'axios';
 import { URL_TWO } from '../../../variables';
 import { SET_DRIVER_DESTINATION, SET_DRIVER_ROUTE } from '../../../redux/types/types';
-import DriverIcon from '../imgs/drivericon.png';
+import DriverIconOld from '../imgs/drivericon.png';
+import DriverIcon from '../imgs/livebus.png';
 import { motion } from 'framer-motion'
+import BusIcon from '@material-ui/icons/DirectionsBus'
+import CommutersIcon from '@material-ui/icons/PeopleAltRounded'
 
 function InfoMap() {
 
@@ -139,10 +142,10 @@ function InfoMap() {
             {/* <p id='p_infomap_label'>Info Map</p> */}
         </div>
         <div id='div_route_info'>
-            <p id='p_route_info_label'><b>Bus ID:</b> {userDataDetails.busID}</p>
-            <p id='p_route_info_label'><b>Capacity:</b> {userDataDetails.capacity}</p>
-            <p id='p_route_info_label'><b>Current Route:</b> {userDataDetails.routeName}</p>
-            <p id='p_route_info_label'><b>From:</b> {driverdestination.stationID} | {driverdestination.stationName}</p>
+            <p className='p_route_info_label'>{userDataDetails.routeName}</p>
+            <p className='p_route_info_label'>From: {driverdestination.stationID} | {driverdestination.stationName}</p>
+            <p className='p_route_info_label'>Bus ID: {userDataDetails.busID}</p>
+            <p className='p_route_info_label'>Capacity: {userDataDetails.capacity}</p>
         </div>
         <div id='div_stationList'>
             {driverroute.stationList.map((st, i) => {
@@ -154,7 +157,7 @@ function InfoMap() {
                                     <motion.div
                                     initial={{
                                         height: `0%`,
-                                        backgroundColor: "orange"
+                                        backgroundColor: "#2B4273"
                                     }}
                                     animate={{
                                         height: `${computeDistance(st.coordinates[1], st.coordinates[0],coords.lat, coords.lng, i)}%`
@@ -166,7 +169,7 @@ function InfoMap() {
                                     <motion.div
                                     initial={{
                                         height: `0%`,
-                                        backgroundColor: "orange"
+                                        backgroundColor: "#2B4273"
                                     }}
                                     animate={{
                                         height: driverdestination.index > i? "100%" : "0%"
@@ -181,7 +184,7 @@ function InfoMap() {
                                 <motion.div
                                 initial={{
                                     height: `0%`,
-                                    backgroundColor: "orange"
+                                    backgroundColor: "#2B4273"
                                 }}
                                 animate={{
                                     height: driverdestination.index > i? "100%" : "0%"
@@ -197,21 +200,43 @@ function InfoMap() {
                             <motion.div
                             initial={{
                                 backgroundColor: "#404040",
-                                color: "white"
+                                color: driverdestination.stationID == `${st.stationID}`? driverdestination.index == i? "white" : "#272727" : "#272727"
                             }}
                             animate={{
-                                backgroundColor: driverdestination.stationID == `${st.stationID}`? driverdestination.index == i? "orange" : "#404040" : "#404040"
+                                backgroundColor: driverdestination.stationID == `${st.stationID}`? driverdestination.index == i? "#2B4273" : "#B7B7B7" : "#B7B7B7",
+                                color: driverdestination.stationID == `${st.stationID}`? driverdestination.index == i? "white" : "#272727" : "#272727"
                             }}
                             className='div_stationInside_container' onClick={() => { 
                                 // settargetBusStop(`${st.stationID}_${i}`)
                                 setDriverDestinationDispatch(st.stationID, st.stationName, i) 
                             }}>
-                                <p id='p_stationName'>{st.stationName}</p>
-                                <p id='p_stationName'>{st.stationID}</p>
+                                <div id='div_stationHeader_icon'>
+                                    <BusIcon style={{fontSize: "25px"}} />
+                                    <div>
+                                        <p id='p_stationName'>{st.stationName}</p>
+                                        <p id='p_stationName'>{st.stationID}</p>
+                                    </div>
+                                </div>
                                 <div className='flexed_div'/>
-                                <p id='p_waitingNumber'><b>Waiting Commuters:</b> {
+                                {/* <motion.p
+                                animate={{
+                                    color: driverdestination.stationID == `${st.stationID}`? driverdestination.index == i? "white" : "#272727" : "#272727"
+                                }}
+                                id='p_waitingNumber'><b>Waiting Commuters:</b> {
                                     JSON.stringify(waitingList.filter((cnt, i) => cnt._id == st.stationID)[0]?.count? waitingList.filter((cnt, i) => cnt._id == st.stationID)[0]?.count : 0)
-                                }</p>
+                                }</motion.p> */}
+                                <div id='div_stationHeader_icon'>
+                                    <CommutersIcon style={{fontSize: "25px"}} />
+                                    <div>
+                                        <motion.p
+                                        animate={{
+                                            color: driverdestination.stationID == `${st.stationID}`? driverdestination.index == i? "white" : "#272727" : "#272727"
+                                        }}
+                                        id='p_waitingNumber'>{
+                                            JSON.stringify(waitingList.filter((cnt, i) => cnt._id == st.stationID)[0]?.count? waitingList.filter((cnt, i) => cnt._id == st.stationID)[0]?.count : 0)
+                                        } waiting commuter/s</motion.p>
+                                    </div>
+                                </div>
                             </motion.div>
                         </div>
                     </div>

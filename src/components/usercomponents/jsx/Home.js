@@ -15,7 +15,8 @@ import CenterOn from '@material-ui/icons/CenterFocusStrong'
 import InfoMapIcon from '@material-ui/icons/AccountTreeOutlined'
 import { Link, useNavigate, Routes, Route, useParams, useLocation } from 'react-router-dom';
 import CommuterIcon from '../imgs/commutericon.png';
-import DriverIcon from '../imgs/drivericon.png';
+import DriverIconOld from '../imgs/drivericon.png';
+import DriverIcon from '../imgs/livebus.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
 import { useDispatch, useSelector } from 'react-redux';
@@ -202,7 +203,7 @@ function Map(){
               center={coords} 
               radius={100}
               options={{
-                strokeColor: userDataDetails.userType == "Commuter"? "lime" : "orange"
+                strokeColor: userDataDetails.userType == "Commuter"? "lime" : "#ff914d"
               }}
             />
             {livelist.map((ls) => {
@@ -753,7 +754,7 @@ function Home() {
       }
     }).then((response) => {
       if(response.data.status){
-        console.log(response.data.result)
+        // console.log(response.data.result)
         dispatch({type: SET_BUS_STOPS_LIST, busstopslist: response.data.result})
       }
     }).catch((err) => {
