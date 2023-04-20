@@ -22,6 +22,8 @@ function InfoMap() {
   const [distanceBarpercentage, setdistanceBarpercentage] = useState(0)
   const [waitingList, setwaitingList] = useState([])
 
+  const [expandDMDW, setexpandDMDW] = useState(false)
+
   useEffect(() => {
     // initDriverRoute()
     // initIteratordistanceBar()
@@ -138,6 +140,21 @@ function InfoMap() {
 
   return (
     <div id='div_infomap'>
+        <motion.div id='div_driver_mapdetails_window'
+            animate={{
+            top: expandDMDW? "60%" : "92%"
+            }}
+            transition={{
+            bounce: 0,
+            duration: 0.1
+            }}
+        >
+            <div id='div_draggable_bar_container'>
+                <div id='div_draggable_bar_hold' onClick={() => {
+                    setexpandDMDW(!expandDMDW)
+                }}></div>
+            </div>
+        </motion.div>
         <div id='div_header_infomap'>
             {/* <p id='p_infomap_label'>Info Map</p> */}
         </div>
