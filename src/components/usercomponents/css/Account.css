@@ -58,16 +58,17 @@
 }
 
 #div_info_holder{
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.7);
     /* border: solid 1px #A8A8A8; */
-    border: solid 1px #CACACA;
+    /* border: solid 1px #CACACA; */
+    border: solid 1px white;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
     width: calc(100% - 40px);
     padding-left: 20px;
     padding-right: 20px;
-    opacity: 0.8;
+    /* opacity: 0.8; */
 }
 
 .div_indv_info_holder{
@@ -88,7 +89,8 @@
 .p_indv_info_label{
     margin: 0px;
     font-size: 13px;
-    color: #686868;
+    color: #404040;
+    /* color: #686868; */
     /* color: white; */
     font-family: 'Roboto', sans-serif;
 }
@@ -99,4 +101,5 @@
     font-family: 'Roboto', sans-serif;
     color: black;
     /* color: white; */
+    /* color: #505050; */
 }
