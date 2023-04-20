@@ -140,7 +140,7 @@ function InfoMap() {
 
   return (
     <div id='div_infomap'>
-        <motion.div id='div_driver_mapdetails_window'
+        <motion.div id='div_driver_infomapdetails_window'
             animate={{
             top: expandDMDW? "60%" : "92%"
             }}
