@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
+
+#div_account_main{
+    background-color: transparent;
+    width: 100%;
+    height: calc(100% - 0px);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-top: 0px;
+    align-items: center;
+    background: url('../imgs/bgimage2_blur.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode:multiply;
+}
+
+#div_driverdefaultimg_holder{
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    padding-bottom: 25px;
+    padding-top: 40px;
+}
+
+#img_driver_default_img{
+    width: 100%;
+    height: 100%;
+    max-width: 150px;
+    max-height: 150px;
+}
+
+#div_personalinfo_container{
+    width: calc(100% - 40px);
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    gap: 20px;
+    padding-bottom: 150px;
+    max-width: 500px;
+}
+
+#p_personalinfo_label{
+    margin: 0px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    text-shadow: 0px 0px 5px black;
+}
+
+#div_info_holder{
+    background-color: white;
+    /* border: solid 1px #A8A8A8; */
+    border: solid 1px #CACACA;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    padding-left: 20px;
+    padding-right: 20px;
+    opacity: 0.8;
+}
+
+.div_indv_info_holder{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-bottom: solid 1px #A8A8A8;
+    gap: 5px;
+}
+
+.div_indv_info_holder:last-of-type{
+    border: none;
+}
+
+.p_indv_info_label{
+    margin: 0px;
+    font-size: 13px;
+    color: #686868;
+    /* color: white; */
+    font-family: 'Roboto', sans-serif;
+}
+
+.p_ind_info_data{
+    margin: 0px;
+    font-size: 15px;
+    font-family: 'Roboto', sans-serif;
+    color: black;
+    /* color: white; */
+}
