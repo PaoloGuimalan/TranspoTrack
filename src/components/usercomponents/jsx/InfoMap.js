@@ -149,7 +149,7 @@ function InfoMap() {
         }
     }).then((response) => {
         if(response.data.status){
-            console.log(response.data.result)
+            // console.log(response.data.result)
             setdriverTimeSchedule(response.data.result)
         }
         else{
@@ -176,6 +176,21 @@ function InfoMap() {
                     <div id='div_draggable_bar_hold' onClick={() => {
                         setexpandDMDW(!expandDMDW)
                     }}></div>
+                </div>
+                <div id='div_time_schedule_header'>
+                    <p id='p_times_schedule_label'>Headway</p>
+                </div>
+                <div id='div_headway_data_container'>
+                    <div className='div_headway_data_ind'>
+                        <p className='p_headway_data_text p_headway_data_label'>Bus Ahead</p>
+                        <p className='p_headway_data_text'>*Bus ID & Bus No</p>
+                        <p className='p_headway_data_text'>*Bus Distance</p>
+                    </div>
+                    <div className='div_headway_data_ind'>
+                        <p className='p_headway_data_text p_headway_data_label'>Bus Behind</p>
+                        <p className='p_headway_data_text'>*Bus ID & Bus No</p>
+                        <p className='p_headway_data_text'>*Bus Distance</p>
+                    </div>
                 </div>
                 <div id='div_time_schedule_header'>
                     <p id='p_times_schedule_label'>Time Schedule & Interval</p>
