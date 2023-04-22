@@ -2,8 +2,8 @@
 
 #div_infomap{
     width: 100%;
-    max-width: 500px;
-    height: calc(100% - 50px);
+    /* max-width: 500px; */
+    height: calc(100% - 51px);
     background-color: #e7e7e7;
     margin-left: auto;
     margin-right: auto;
@@ -11,6 +11,8 @@
     display: flex;
     flex-direction: column;
     font-family: 'Roboto', sans-serif;
+    align-items: center;
+    margin-top: 1px;
 }
 
 #div_header_infomap{
@@ -205,6 +207,11 @@
     flex-direction: column;
     align-items: center;
     padding-top: 20px;
+    /* overflow-y: scroll; */
+    /* padding-bottom: 100px; */
+    /* align-self: center; */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
 }
 
 #div_draggable_bar_container{
@@ -221,4 +228,213 @@
     background-color: #C3C3C3;
     max-width: 100px;
     border-radius: 8px;
+  }
+
+  #div_time_schedule_header{
+    background-color: transparent;
+    width: 100%;
+  }
+
+  #p_times_schedule_label{
+    font-size: 15px;
+    font-weight: bold;
+    /* text-align: left; */
+    font-family: 'Roboto', sans-serif;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently */
+  }
+
+  #div_time_schedule_content{
+    background-color: transparent;
+    width: calc(100% - 20px);
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  #div_time_schedule_days{
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 0px;
+    justify-content: center;
+  }
+  
+  .div_day_selection{
+    background-color: transparent;
+    width: 14.3%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .p_day_selection_labels{
+    font-size: 13px;
+    margin: 0px;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-bottom: 5px;
+    font-family: 'Roboto', sans-serif;
+    /* font-weight: bold; */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently */
+  }
+
+  .div_day_selection_indicator_container{
+    background-color: #D9D9D9;
+    width: 100%;
+    height: 10px;
+  }
+
+  .div_day_selection_indicator_container_uno{
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
+  }
+
+  .div_day_selection_indicator_container_last{
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+  .div_day_selection_indicator{
+    background-color: #2B4273;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+  }
+
+  #div_time_schedule_sorted_container{
+    background-color: transparent;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+  }
+
+  #p_trip_destination_label{
+    text-align: left;
+    margin: 0px;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  #div_driver_infomapdetails_content_container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 20px;
+  }
+
+  .div_loop_per_time_interval{
+    background-color: transparent;
+    width: 100%;
+    margin-bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #div_time_interval_point_bar_container{
+    background-color: transparent;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    /* height: 40px; */
+    /* max-width: 300px; */
+  }
+
+  #div_time_interval_point_bar{
+    background-color: #C8C8C8;
+    width: 100%;
+    height: 45px;
+    max-width: 300px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #div_time_interval_start_point{
+    background-color: #2B4273;
+    height: 100%;
+    width: 50%;
+    max-width: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+    color: white;
+    font-size: 13px;
+  }
+
+  #div_time_interval_end_point{
+    background-color: #FFC700;
+    height: 100%;
+    width: 50%;
+    max-width: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    border-bottom-right-radius: 15px;
+    border-top-right-radius: 15px;
+    color: white;
+    font-size: 13px;
+  }
+
+  #div_tripTime_visuals{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+    padding-top: 10px;
+    gap: 5px;
+  }
+
+  .p_tripTime_indv{
+    margin: 0px;
+    font-size: 13px;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  #hr_separator{
+    background-color: transparent;
+    display: flex;
+    flex: 1;
+    border: 1px dashed #4A4A4A;
+  }
+
+  #div_tripInterval_visuals{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  #p_tripInterval_data{
+    font-size: 13px;
+    margin: 0px;
+    font-family: 'Roboto', sans-serif;
   }

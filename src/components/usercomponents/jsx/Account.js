@@ -52,6 +52,17 @@ function Account() {
             <p className='p_ind_info_data'>{userDataDetails.dlicense}</p>
           </div>
         </div>
+        <p id='p_personalinfo_label'>Driver Route</p>
+        <div id='div_info_holder'>
+          <div className='div_indv_info_holder'>
+            <p className='p_indv_info_label'>Route ID</p>
+            <p className='p_ind_info_data'>{userDataDetails.routeID}</p>
+          </div>
+          <div className='div_indv_info_holder'>
+            <p className='p_indv_info_label'>Route Name</p>
+            <p className='p_ind_info_data'>{userDataDetails.routeName}</p>
+          </div>
+        </div>
         <p id='p_personalinfo_label'>Bus Assigned</p>
         <div id='div_info_holder'>
           <div className='div_indv_info_holder'>

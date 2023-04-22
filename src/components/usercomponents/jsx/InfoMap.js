@@ -24,6 +24,9 @@ function InfoMap() {
 
   const [expandDMDW, setexpandDMDW] = useState(false)
 
+  const [driverTimeSchedule, setdriverTimeSchedule] = useState([])
+  const [selectedDayofTimeSched, setselectedDayofTimeSched] = useState("Monday")
+
   useEffect(() => {
     // initDriverRoute()
     // initIteratordistanceBar()
@@ -31,6 +34,7 @@ function InfoMap() {
 
   useEffect(() => {
     initWaitingCount()
+    initDriverTimeSchedule()
 
     return () => {
         initWaitingCount = () => {  }
@@ -138,21 +142,192 @@ function InfoMap() {
     })
   }
 
+  const initDriverTimeSchedule = () => {
+    Axios.get(`${URL_TWO}/getDriverTimeSchedule/${userDataDetails.routeID}`,{
+        headers:{
+            "x-access-tokendriver": localStorage.getItem("tokendriver")
+        }
+    }).then((response) => {
+        if(response.data.status){
+            console.log(response.data.result)
+            setdriverTimeSchedule(response.data.result)
+        }
+        else{
+            //false response
+        }
+    }).catch((err) => {
+        console.log(err)
+    })
+  }
+
   return (
     <div id='div_infomap'>
         <motion.div id='div_driver_infomapdetails_window'
             animate={{
-            top: expandDMDW? "60%" : "92%"
+            top: expandDMDW? "calc(60% - 20px)" : "92%"
             }}
             transition={{
             bounce: 0,
             duration: 0.1
             }}
         >
-            <div id='div_draggable_bar_container'>
-                <div id='div_draggable_bar_hold' onClick={() => {
-                    setexpandDMDW(!expandDMDW)
-                }}></div>
+            <div id='div_driver_infomapdetails_content_container'>
+                <div id='div_draggable_bar_container'>
+                    <div id='div_draggable_bar_hold' onClick={() => {
+                        setexpandDMDW(!expandDMDW)
+                    }}></div>
+                </div>
+                <div id='div_time_schedule_header'>
+                    <p id='p_times_schedule_label'>Time Schedule & Interval</p>
+                </div>
+                <div id='div_time_schedule_content'>
+                    <div id='div_time_schedule_days'>
+                        <div className='div_day_selection' onClick={() => {
+                            setselectedDayofTimeSched("Monday")
+                        }}>
+                            <p className='p_day_selection_labels'>Mon</p>
+                            <div className='div_day_selection_indicator_container div_day_selection_indicator_container_uno'>
+                                <motion.div
+                                animate={{
+                                    backgroundColor: selectedDayofTimeSched == "Monday"? "#2B4273" : "#D9D9D9"
+                                }}
+                                className='div_day_selection_indicator' />
+                            </div>
+                        </div>
+                        <div className='div_day_selection' onClick={() => {
+                            setselectedDayofTimeSched("Tuesday")
+                        }}>
+                            <p className='p_day_selection_labels'>Tue</p>
+                            <div className='div_day_selection_indicator_container'>
+                                <motion.div
+                                animate={{
+                                    backgroundColor: selectedDayofTimeSched == "Tuesday"? "#2B4273" : "#D9D9D9"
+                                }}
+                                className='div_day_selection_indicator' />
+                            </div>
+                        </div>
+                        <div className='div_day_selection' onClick={() => {
+                            setselectedDayofTimeSched("Wednesday")
+                        }}>
+                            <p className='p_day_selection_labels'>Wed</p>
+                            <div className='div_day_selection_indicator_container'>
+                                <motion.div
+                                animate={{
+                                    backgroundColor: selectedDayofTimeSched == "Wednesday"? "#2B4273" : "#D9D9D9"
+                                }}
+                                className='div_day_selection_indicator' />
+                            </div>
+                        </div>
+                        <div className='div_day_selection' onClick={() => {
+                            setselectedDayofTimeSched("Thursday")
+                        }}>
+                            <p className='p_day_selection_labels'>Thur</p>
+                            <div className='div_day_selection_indicator_container'>
+                                <motion.div
+                                animate={{
+                                    backgroundColor: selectedDayofTimeSched == "Thursday"? "#2B4273" : "#D9D9D9"
+                                }}
+                                className='div_day_selection_indicator' />
+                            </div>
+                        </div>
+                        <div className='div_day_selection' onClick={() => {
+                            setselectedDayofTimeSched("Friday")
+                        }}>
+                            <p className='p_day_selection_labels'>Fri</p>
+                            <div className='div_day_selection_indicator_container'>
+                                <motion.div
+                                animate={{
+                                    backgroundColor: selectedDayofTimeSched == "Friday"? "#2B4273" : "#D9D9D9"
+                                }}
+                                className='div_day_selection_indicator' />
+                            </div>
+                        </div>
+                        <div className='div_day_selection' onClick={() => {
+                            setselectedDayofTimeSched("Saturday")
+                        }}>
+                            <p className='p_day_selection_labels'>Sat</p>
+                            <div className='div_day_selection_indicator_container'>
+                                <motion.div
+                                animate={{
+                                    backgroundColor: selectedDayofTimeSched == "Saturday"? "#2B4273" : "#D9D9D9"
+                                }}
+                                className='div_day_selection_indicator' />
+                            </div>
+                        </div>
+                        <div className='div_day_selection' onClick={() => {
+                            setselectedDayofTimeSched("Sunday")
+                        }}>
+                            <p className='p_day_selection_labels'>Sun</p>
+                            <div className='div_day_selection_indicator_container div_day_selection_indicator_container_last'>
+                                <motion.div
+                                animate={{
+                                    backgroundColor: selectedDayofTimeSched == "Sunday"? "#2B4273" : "#D9D9D9"
+                                }}
+                                className='div_day_selection_indicator' />
+                            </div>
+                        </div>
+                    </div>
+                    {driverTimeSchedule.filter((dts, i) => dts.tripDay == selectedDayofTimeSched).map((sdts, i) => {
+                        if(i == 0){
+                            return(
+                                <div key={i} id='div_time_schedule_sorted_container'>
+                                    <p id='p_trip_destination_label'>{sdts.tripDestination}</p>
+                                    {driverTimeSchedule.filter((dts, j) => dts.tripDay == selectedDayofTimeSched && dts.tripDestination == sdts.tripDestination).map((sdts2, j) => {
+                                        return(
+                                            <div key={j} className='div_loop_per_time_interval'>
+                                                <div id='div_time_interval_point_bar_container'>
+                                                    <div id='div_time_interval_point_bar'>
+                                                        <div id='div_time_interval_start_point'>A</div>
+                                                        <div id='div_time_interval_end_point'>B</div>
+                                                    </div>
+                                                    <div id='div_tripTime_visuals'>
+                                                        <p className='p_tripTime_indv'>{sdts2.tripTime.split("-")[0]}</p>
+                                                        <hr id='hr_separator'/>
+                                                        <p className='p_tripTime_indv'>{sdts2.tripTime.split("-")[1]}</p>
+                                                    </div>
+                                                    <div id='div_tripInterval_visuals'>
+                                                        <p id='p_tripInterval_data'>({sdts2.tripInterval} interval)</p>
+                                                    </div>
+                                                </div>
+                                                {/* <p>{sdts2.tripTime} {sdts2.tripInterval}</p> */}
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            )
+                        }
+                        else{
+                            if(driverTimeSchedule.filter((dts, i) => dts.tripDay == selectedDayofTimeSched)[i - 1].tripDestination != sdts.tripDestination){
+                                return(
+                                    <div key={i} id='div_time_schedule_sorted_container'>
+                                        <p id='p_trip_destination_label'>{sdts.tripDestination}</p>
+                                        {driverTimeSchedule.filter((dts, j) => dts.tripDay == selectedDayofTimeSched && dts.tripDestination == sdts.tripDestination).map((sdts2, j) => {
+                                            return(
+                                                <div key={j} className='div_loop_per_time_interval'>
+                                                    <div id='div_time_interval_point_bar_container'>
+                                                        <div id='div_time_interval_point_bar'>
+                                                            <div id='div_time_interval_start_point'>A</div>
+                                                            <div id='div_time_interval_end_point'>B</div>
+                                                        </div>
+                                                        <div id='div_tripTime_visuals'>
+                                                            <p className='p_tripTime_indv'>{sdts2.tripTime.split("-")[0]}</p>
+                                                            <hr id='hr_separator'/>
+                                                            <p className='p_tripTime_indv'>{sdts2.tripTime.split("-")[1]}</p>
+                                                        </div>
+                                                        <div id='div_tripInterval_visuals'>
+                                                            <p id='p_tripInterval_data'>({sdts2.tripInterval} interval)</p>
+                                                        </div>
+                                                    </div>
+                                                    {/* <p>{sdts2.tripTime} {sdts2.tripInterval}</p> */}
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                )
+                            }
+                        }
+                    })}
+                </div>
             </div>
         </motion.div>
         <div id='div_header_infomap'>
