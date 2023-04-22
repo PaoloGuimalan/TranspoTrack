@@ -20,7 +20,7 @@ import DriverIcon from '../imgs/livebus.png';
 import { logoutSocket, returnValueArray, socketIdentifier } from '../../../socket/socket';
 import { URL_TWO } from '../../../variables';
 import { useDispatch, useSelector } from 'react-redux';
-import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_DESTINATION, SET_DRIVER_ROUTE, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, SET_NEON_ASSISTANT_STATUS, USER_DETAILS } from '../../../redux/types/types';
+import { SET_BUS_STOPS_LIST, SET_CENTER_EN, SET_COMMUTER_TRAVEL_DATA, SET_COORDS, SET_DRIVER_DESTINATION, SET_DRIVER_ROUTE, SET_DRIVER_TRAVEL_DATA, SET_INFO_TOGGLE, SET_INTITIAL_POSITION, SET_LIVE_BUS_LIST, SET_NEON_ASSISTANT_STATUS, USER_DETAILS } from '../../../redux/types/types';
 import RoutesConfig from './RoutesConfig';
 import Account from './Account';
 import { userdatadetailsstate } from '../../../redux/action/action';
@@ -651,7 +651,10 @@ function Home() {
         }).then((response) => {
           //do nothing
           if(response.data.status){
-            // console.log(response.data.message)
+            // console.log(Object.values(response.data.result))
+            var livebuslistresponsearray = Object.values(response.data.result)
+            var livebuslistfilter = livebuslistresponsearray.filter((lbl, i) => lbl.userID != userDataDetails.driverID && lbl.routeID == userDataDetails.routeID && lbl.busNo != 0)
+            dispatch({type: SET_LIVE_BUS_LIST, livebuslist: livebuslistfilter})
             setTimeout(() => {
               shareLocationTrigger()
             },1500)

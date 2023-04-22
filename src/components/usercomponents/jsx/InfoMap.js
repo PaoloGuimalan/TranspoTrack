@@ -16,6 +16,7 @@ function InfoMap() {
   const driverroute = useSelector(state => state.driverroute);
   const coords = useSelector(state => state.coords);
   const driverdestination = useSelector(state => state.driverdestination)
+  const livebuslist = useSelector(state => state.livebuslist);
   const dispatch = useDispatch()
 
   const [targetBusStop, settargetBusStop] = useState("");
@@ -160,6 +161,27 @@ function InfoMap() {
     })
   }
 
+  const computeDistanceHeadway = (lat1, lon1, lat2, lon2) => {
+    const R = 6371e3;
+    const φ1 = parseFloat(lat1) * Math.PI/180;
+    const φ2 = parseFloat(lat2) * Math.PI/180;
+    const Δφ = (parseFloat(lat2) - parseFloat(lat1)) * Math.PI/180;
+    const Δλ = (parseFloat(lon2) - parseFloat(lon1)) * Math.PI/180;
+
+    const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    const d = R * c;
+
+    const fixedToKm = d / 1000
+
+    // console.log(d)
+
+    return fixedToKm.toFixed(1) < 1? `${d.toFixed(2)} m` : `${fixedToKm.toFixed(1)} km`;
+  }
+
   return (
     <div id='div_infomap'>
         <motion.div id='div_driver_infomapdetails_window'
@@ -183,13 +205,13 @@ function InfoMap() {
                 <div id='div_headway_data_container'>
                     <div className='div_headway_data_ind'>
                         <p className='p_headway_data_text p_headway_data_label'>Bus Ahead</p>
-                        <p className='p_headway_data_text'>*Bus ID & Bus No</p>
-                        <p className='p_headway_data_text'>*Bus Distance</p>
+                        <p className='p_headway_data_text'>{livebuslist.filter((lvb, i) => lvb.busNo < userDataDetails.busNo).length > 0? `${livebuslist.filter((lvb, i) => lvb.busNo < userDataDetails.busNo).sort((a, b) => b.busNo - a.busNo)[0]?.busID} | ${livebuslist.filter((lvb, i) => lvb.busNo < userDataDetails.busNo).sort((a, b) => b.busNo - a.busNo)[0]?.busNo}` : "No Bus Detected"}</p>
+                        <p className='p_headway_data_text'>{livebuslist.filter((lvb, i) => lvb.busNo < userDataDetails.busNo).length > 0? `${computeDistanceHeadway(livebuslist.filter((lvb, i) => lvb.busNo < userDataDetails.busNo).sort((a, b) => b.busNo - a.busNo)[0]?.latitude, livebuslist.filter((lvb, i) => lvb.busNo < userDataDetails.busNo).sort((a, b) => b.busNo - a.busNo)[0]?.longitude, coords.lat, coords.lng)}` : "No Distance"}</p>
                     </div>
                     <div className='div_headway_data_ind'>
                         <p className='p_headway_data_text p_headway_data_label'>Bus Behind</p>
-                        <p className='p_headway_data_text'>*Bus ID & Bus No</p>
-                        <p className='p_headway_data_text'>*Bus Distance</p>
+                        <p className='p_headway_data_text'>{livebuslist.filter((lvb, i) => lvb.busNo > userDataDetails.busNo).length > 0? `${livebuslist.filter((lvb, i) => lvb.busNo > userDataDetails.busNo).sort((a, b) => a.busNo - b.busNo)[0]?.busID} | ${livebuslist.filter((lvb, i) => lvb.busNo > userDataDetails.busNo).sort((a, b) => a.busNo - b.busNo)[0]?.busNo}` : "No Bus Detected"}</p>
+                        <p className='p_headway_data_text'>{livebuslist.filter((lvb, i) => lvb.busNo > userDataDetails.busNo).length > 0? `${computeDistanceHeadway(livebuslist.filter((lvb, i) => lvb.busNo > userDataDetails.busNo).sort((a, b) => a.busNo - b.busNo)[0]?.latitude, livebuslist.filter((lvb, i) => lvb.busNo > userDataDetails.busNo).sort((a, b) => a.busNo - b.busNo)[0]?.longitude, coords.lat, coords.lng)}` : "No Distance"}</p>
                     </div>
                 </div>
                 <div id='div_time_schedule_header'>
