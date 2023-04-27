@@ -70,6 +70,10 @@ function Account() {
             <p className='p_ind_info_data'>{userDataDetails.busID}</p>
           </div>
           <div className='div_indv_info_holder'>
+            <p className='p_indv_info_label'>Bus No.</p>
+            <p className='p_ind_info_data'>{userDataDetails.busNo == 0? "unassigned" : userDataDetails.busNo}</p>
+          </div>
+          <div className='div_indv_info_holder'>
             <p className='p_indv_info_label'>Plate Number</p>
             <p className='p_ind_info_data'>{userDataDetails.plateNumber}</p>
           </div>

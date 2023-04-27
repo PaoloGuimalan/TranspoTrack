@@ -309,10 +309,10 @@ function Register() {
                                                         </li>
                                                         <li>
                                                             <br />
-                                                            <input type='password' placeholder='Confirm Password' className='input_login' onChange={(e) => {setconfpass(e.target.value)}} value={confpass} />
+                                                            <input type='password' placeholder='Password' className='input_login' onChange={(e) => {setpass(e.target.value)}} value={pass} />
                                                         </li>
                                                         <li>
-                                                            <input type='password' placeholder='Password' className='input_login' onChange={(e) => {setpass(e.target.value)}} value={pass} />
+                                                            <input type='password' placeholder='Confirm Password' className='input_login' onChange={(e) => {setconfpass(e.target.value)}} value={confpass} />
                                                         </li>
                                                         <li>
                                                             <button id='btn_register' onClick={() => {registersubmit("Driver")}}>Register</button>
