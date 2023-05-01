@@ -341,6 +341,54 @@ const MapRoute = () => {
     // console.log(driverroute.stationList.filter((sn, i) => sn.stationID == driverdestination.stationID && i == driverdestination.index))
   },[])
 
+  function dateGetter(){
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    return today = mm + '/' + dd + '/' + yyyy;
+}
+
+function timeGetter(){
+    var today = new Date();
+    var hour = String(today.getHours() % 12 || 12);
+    var minutes = String(today.getMinutes() >= 9? today.getMinutes() : `0${today.getMinutes()}`)
+    var seconds = String(today.getSeconds() >= 9? today.getSeconds() : `0${today.getSeconds()}`)
+    var timeIndicator = hour >= 12? "am" : "pm"
+
+    return today = `${hour}:${minutes} ${timeIndicator}`;
+}
+
+  const saveStopActivity = (stationID, stationName, latitude, longitude) => {
+    Axios.get(`https://us1.locationiq.com/v1/reverse?key=pk.2dd9b328ed0803c41448fc0c3ba30cd4&lat=${latitude}&lon=${longitude}&format=json`)
+    .then((response) => {
+      var fulladdress = response.data.display_name;
+
+      Axios.post(`${URL_TWO}/postStationArrival`, {
+        stationID: stationID,
+        stationName: stationName,
+        longitude: longitude,
+        latitude: latitude,
+        address: fulladdress,
+        date: dateGetter(),
+        time: timeGetter(),
+        routeID: userDataDetails.routeID
+      },{
+        headers:{
+          "x-access-tokendriver": localStorage.getItem('tokendriver')
+        }
+      }).then((response1) => {
+        if(response1.data.status){
+          //fetch changed prompt
+        }
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   const NextStationAction = () => {
     // alert("Next")
     if(driverdestination.index == driverroute.stationList.length - 1){
@@ -349,6 +397,7 @@ const MapRoute = () => {
         stationName: driverroute.stationList[0].stationName,
         index: 0
       }})
+      saveStopActivity(driverroute.stationList[0].stationID, driverroute.stationList[0].stationName, coords.lat, coords.lng)
     }
     else{
       dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
@@ -356,6 +405,7 @@ const MapRoute = () => {
         stationName: driverroute.stationList[driverdestination.index + 1].stationName,
         index: driverdestination.index + 1
       }})
+      saveStopActivity(driverroute.stationList[driverdestination.index + 1].stationID, driverroute.stationList[driverdestination.index + 1].stationName, coords.lat, coords.lng)
     }
   }
 
@@ -367,6 +417,7 @@ const MapRoute = () => {
         stationName: driverroute.stationList[driverroute.stationList.length - 1].stationName,
         index: driverroute.stationList.length - 1
       }})
+      // saveStopActivity(driverroute.stationList[driverdestination.index + 1].stationID, driverroute.stationList[driverdestination.index + 1].stationName, coords.lat, coords.lng)
     }
     else{
       dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
@@ -374,6 +425,7 @@ const MapRoute = () => {
         stationName: driverroute.stationList[driverdestination.index - 1].stationName,
         index: driverdestination.index - 1
       }})
+      // saveStopActivity(driverroute.stationList[0].stationID, driverroute.stationList[0].stationName, coords.lat, coords.lng)
     }
   }
 
@@ -610,6 +662,53 @@ function Home() {
     return d;
   }
 
+  function dateGetter(){
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+      var yyyy = today.getFullYear();
+
+      return today = mm + '/' + dd + '/' + yyyy;
+  }
+
+  function timeGetter(){
+      var today = new Date();
+      var hour = String(today.getHours() % 12 || 12);
+      var minutes = String(today.getMinutes() >= 9? today.getMinutes() : `0${today.getMinutes()}`)
+      var seconds = String(today.getSeconds() >= 9? today.getSeconds() : `0${today.getSeconds()}`)
+      var timeIndicator = hour >= 12? "am" : "pm"
+
+      return today = `${hour}:${minutes} ${timeIndicator}`;
+  }
+
+  const saveStopActivity = (stationID, stationName, latitude, longitude) => {
+    Axios.get(`https://us1.locationiq.com/v1/reverse?key=pk.2dd9b328ed0803c41448fc0c3ba30cd4&lat=${latitude}&lon=${longitude}&format=json`)
+    .then((response) => {
+      var fulladdress = response.data.display_name;
+
+      Axios.post(`${URL_TWO}/postStationArrival`, {
+        stationID: stationID,
+        stationName: stationName,
+        longitude: longitude,
+        latitude: latitude,
+        address: fulladdress,
+        date: dateGetter(),
+        time: timeGetter()
+      },{
+        headers:{
+          "x-access-tokendriver": localStorage.getItem('tokendriver')
+        }
+      }).then((response1) => {
+        if(response1.data.status){
+          //fetch changed prompt
+        }
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   var shareLocationTrigger = () => {
     //userDataDetails.userID != ''
     if(true){
@@ -635,7 +734,7 @@ function Home() {
               stationName: driverroute.stationList[0].stationName,
               index: 0
             }})
-            alert("Change Station 1")
+            saveStopActivity(driverroute.stationList[0].stationID, driverroute.stationList[0].stationName, position.coords.latitude, position.coords.longitude)
           }
           else{
             dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
@@ -643,7 +742,7 @@ function Home() {
               stationName: driverroute.stationList[driverdestination.index + 1].stationName,
               index: driverdestination.index + 1
             }})
-            alert("Change Station 2")
+            saveStopActivity(driverroute.stationList[driverdestination.index + 1].stationID, driverroute.stationList[driverdestination.index + 1].stationName, position.coords.latitude, position.coords.longitude)
           }
         }
         Axios.get(`${URL_TWO}/activeDriversRoute/${driverdestination.stationID}/${driverdestination.stationName}/${driverdestination.index}/${position.coords.latitude}/${position.coords.longitude}/${infotoggle}`, {

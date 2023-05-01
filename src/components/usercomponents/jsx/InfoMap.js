@@ -48,12 +48,65 @@ function InfoMap() {
     },1000)
   }
 
+  function dateGetter(){
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        return today = mm + '/' + dd + '/' + yyyy;
+    }
+
+    function timeGetter(){
+        var today = new Date();
+        var hour = String(today.getHours() % 12 || 12);
+        var minutes = String(today.getMinutes() >= 9? today.getMinutes() : `0${today.getMinutes()}`)
+        var seconds = String(today.getSeconds() >= 9? today.getSeconds() : `0${today.getSeconds()}`)
+        var timeIndicator = hour >= 12? "am" : "pm"
+
+        return today = `${hour}:${minutes} ${timeIndicator}`;
+    }
+
+  const saveStopActivity = (stationID, stationName, latitude, longitude) => {
+    Axios.get(`https://us1.locationiq.com/v1/reverse?key=pk.2dd9b328ed0803c41448fc0c3ba30cd4&lat=${latitude}&lon=${longitude}&format=json`)
+    .then((response) => {
+      var fulladdress = response.data.display_name;
+
+      Axios.post(`${URL_TWO}/postStationArrival`, {
+        stationID: stationID,
+        stationName: stationName,
+        longitude: longitude,
+        latitude: latitude,
+        address: fulladdress,
+        date: dateGetter(),
+        time: timeGetter(),
+        routeID: userDataDetails.routeID
+      },{
+        headers:{
+          "x-access-tokendriver": localStorage.getItem('tokendriver')
+        }
+      }).then((response1) => {
+        if(response1.data.status){
+          //fetch changed prompt
+        }
+      })
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   const setDriverDestinationDispatch = (stationIDDispatch, stationNameDispatch, indexDispatch) => {
     dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
         stationID: stationIDDispatch,
         stationName: stationNameDispatch,
         index: indexDispatch
     }})
+    if(driverdestination.index != indexDispatch){
+        if(driverdestination.index < indexDispatch){
+            saveStopActivity(stationIDDispatch, stationNameDispatch, coords.lat, coords.lng)
+        }
+    }
   }
 
 //   const initDriverRoute = () => {
