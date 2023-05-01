@@ -635,7 +635,7 @@ function Home() {
               stationName: driverroute.stationList[0].stationName,
               index: 0
             }})
-            console.log("Change Station 1")
+            alert("Change Station 1")
           }
           else{
             dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
@@ -643,7 +643,7 @@ function Home() {
               stationName: driverroute.stationList[driverdestination.index + 1].stationName,
               index: driverdestination.index + 1
             }})
-            console.log("Change Station 2")
+            alert("Change Station 2")
           }
         }
         Axios.get(`${URL_TWO}/activeDriversRoute/${driverdestination.stationID}/${driverdestination.stationName}/${driverdestination.index}/${position.coords.latitude}/${position.coords.longitude}/${infotoggle}`, {
