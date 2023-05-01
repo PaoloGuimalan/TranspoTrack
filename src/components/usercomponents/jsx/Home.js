@@ -628,13 +628,14 @@ function Home() {
         //   coordinates: { lat: position.coords.latitude, lng: position.coords.longitude }
         // }, userDataDetails.userType)
         var distanceListener = computeDistance(position.coords.latitude, position.coords.longitude)
-        if(distanceListener < 50){
+        if(distanceListener < 100){ //from 50 to 100
           if(driverdestination.index == driverroute.stationList.length - 1){
             dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
               stationID: driverroute.stationList[0].stationID,
               stationName: driverroute.stationList[0].stationName,
               index: 0
             }})
+            console.log("Change Station 1")
           }
           else{
             dispatch({type: SET_DRIVER_DESTINATION, driverdestination: {
@@ -642,6 +643,7 @@ function Home() {
               stationName: driverroute.stationList[driverdestination.index + 1].stationName,
               index: driverdestination.index + 1
             }})
+            console.log("Change Station 2")
           }
         }
         Axios.get(`${URL_TWO}/activeDriversRoute/${driverdestination.stationID}/${driverdestination.stationName}/${driverdestination.index}/${position.coords.latitude}/${position.coords.longitude}/${infotoggle}`, {
